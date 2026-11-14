@@ -624,3 +624,43 @@ button:disabled,
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ──────────────────────────────────────────────────────────────
+   Nexus v2: financial-terminal identity (teal + amber), aurora
+   backdrop, cursor spotlight on cards, mono figures.
+   ────────────────────────────────────────────────────────────── */
+:root { --font-sans: var(--font-nexus-sans), ui-sans-serif, system-ui; --font-mono: var(--font-nexus-mono), ui-monospace, monospace; }
+body { font-family: var(--font-nexus-sans), ui-sans-serif, system-ui, sans-serif; }
+.font-mono { font-family: var(--font-nexus-mono), ui-monospace, monospace; }
+.dark {
+  --background: #0a0f10;
+  --card: #10171a;
+  --popover: #131c1f;
+  --muted: #182226;
+  --muted-foreground: #8fa3a6;
+  --border: #1f2c30;
+  --primary: #2dd4bf;
+  --primary-foreground: #04201c;
+  --accent: #fbbf24;
+  --ring: #2dd4bf;
+  --sidebar: #0c1315;
+  --surface-raised: #131c1f;
+  --surface-subtle: #0d1416;
+}
+.dark body::before {
+  content: ""; position: fixed; inset: -20%; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(30% 25% at 20% 10%, rgb(45 212 191 / 0.10), transparent 70%),
+    radial-gradient(25% 25% at 85% 20%, rgb(251 191 36 / 0.07), transparent 70%),
+    radial-gradient(35% 30% at 60% 90%, rgb(56 189 248 / 0.06), transparent 70%);
+  animation: nexus-aurora 24s ease-in-out infinite alternate;
+}
+@keyframes nexus-aurora { to { transform: translate3d(4%, 3%, 0) rotate(6deg) scale(1.05); } }
+
+.nexus-spot::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .3s;
+  background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), rgb(45 212 191 / 0.12), transparent 60%);
+}
+.nexus-spot:hover::after { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) { .dark body::before { animation: none; } }

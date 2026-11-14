@@ -5,6 +5,7 @@ import { ArrowDownRight, ArrowUpRight, Minus } from "lucide-react";
 import { Card } from "./ui";
 import type { MetricPoint } from "@/lib/dashboard-metrics";
 import { cn } from "@/lib/utils";
+import { AnimatedValue } from "./animated-value";
 
 export function DashboardKpi({
   label,
@@ -28,7 +29,7 @@ export function DashboardKpi({
   const neutral = delta === 0;
   const TrendIcon = neutral ? Minus : delta > 0 ? ArrowUpRight : ArrowDownRight;
   return (
-    <Card className="group relative min-w-0 animate-rise overflow-hidden p-5 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-[0_22px_55px_-34px_var(--primary)]">
+    <Card onPointerMove={(e) => { const r = e.currentTarget.getBoundingClientRect(); e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`); e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`); }} className="nexus-spot group relative min-w-0 animate-rise overflow-hidden p-5 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-[0_22px_55px_-34px_var(--primary)]">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/55 to-transparent opacity-50" />
       <div className="flex items-start justify-between gap-3">
         <p className="text-sm font-medium text-muted-foreground">{label}</p>

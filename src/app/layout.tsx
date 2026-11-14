@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
+import { Instrument_Sans, Spline_Sans_Mono } from "next/font/google";
 import "./globals.css";
+
+const sans = Instrument_Sans({ variable: "--font-nexus-sans", subsets: ["latin"] });
+const mono = Spline_Sans_Mono({ variable: "--font-nexus-mono", subsets: ["latin"] });
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
 export const metadata: Metadata = {
@@ -43,7 +47,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth" className={`${sans.variable} ${mono.variable}`}>
       <body>
         <ThemeProvider>
           {children}
