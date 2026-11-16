@@ -20,7 +20,7 @@ export default function TermsPage() {
           <section><h2 className="mb-2 text-xl font-semibold text-foreground">Accounts and security</h2><p>You are responsible for activity under your account and for keeping access credentials secure. Notify us if you believe your account has been compromised.</p></section>
           <section><h2 className="mb-2 text-xl font-semibold text-foreground">Availability</h2><p>The service is provided on an as-is and as-available basis. Because Nexus is a portfolio project, features may change and uninterrupted availability is not guaranteed.</p></section>
           <section><h2 className="mb-2 text-xl font-semibold text-foreground">Your content</h2><p>You retain ownership of content you submit. You grant Nexus the limited permission necessary to store, process, and display that content solely to operate the service.</p></section>
-          <section><h2 className="mb-2 text-xl font-semibold text-foreground">Contact</h2><p>Questions about these terms can be sent to <a className="text-primary underline-offset-4 hover:underline" href="mailto:ytvitorgamer6@gmail.com">ytvitorgamer6@gmail.com</a>.</p></section>
+          <section><h2 className="mb-2 text-xl font-semibold text-foreground">Contact</h2><p>Questions about these terms can be sent to <a className="text-primary underline-offset-4 hover:underline" href="mailto:vhcodestudio@gmail.com">vhcodestudio@gmail.com</a>.</p></section>
         </article>
         <footer className="mt-14 flex gap-5 border-t pt-6 text-sm text-muted-foreground"><Link className="hover:text-foreground" href="/privacy">Privacy</Link><Link className="hover:text-foreground" href="/">Home</Link></footer>
       </div>

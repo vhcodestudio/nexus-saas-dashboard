@@ -26,7 +26,7 @@ export default function PrivacyPage() {
           <section><h2 className="mb-2 text-xl font-semibold text-foreground">How information is used</h2><p>Information is used to secure accounts, provide requested features, maintain workspace boundaries, diagnose reliability issues, and prevent abuse. Nexus does not sell personal information.</p></section>
           <section><h2 className="mb-2 text-xl font-semibold text-foreground">Services and retention</h2><p>Nexus uses Supabase for authentication and data storage and Vercel for application hosting. Data is retained while an account or workspace is active, subject to operational backups and applicable legal requirements.</p></section>
           <section><h2 className="mb-2 text-xl font-semibold text-foreground">Your choices</h2><p>You may request access, correction, export, or deletion of your account data. You can also revoke Google access from your Google Account security settings.</p></section>
-          <section><h2 className="mb-2 text-xl font-semibold text-foreground">Contact</h2><p>For privacy or account questions, contact <a className="text-primary underline-offset-4 hover:underline" href="mailto:ytvitorgamer6@gmail.com">ytvitorgamer6@gmail.com</a>.</p></section>
+          <section><h2 className="mb-2 text-xl font-semibold text-foreground">Contact</h2><p>For privacy or account questions, contact <a className="text-primary underline-offset-4 hover:underline" href="mailto:vhcodestudio@gmail.com">vhcodestudio@gmail.com</a>.</p></section>
         </article>
         <footer className="mt-14 flex gap-5 border-t pt-6 text-sm text-muted-foreground"><Link className="hover:text-foreground" href="/terms">Terms</Link><Link className="hover:text-foreground" href="/">Home</Link></footer>
       </div>
