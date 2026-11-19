@@ -27,6 +27,7 @@ import { useState } from "react";
 import { NexusMark } from "@/components/nexus-mark";
 import { Badge, Card } from "@/components/ui";
 import type { DemoView } from "@/app/demo/[[...view]]/page";
+import { LangSwitch, useNumberLocale, useTr } from "@/components/lang-provider";
 
 const navigation = [
   { view: "dashboard", label: "Overview", icon: LayoutDashboard },
@@ -74,11 +75,12 @@ function DemoAction({
   children: React.ReactNode;
   className?: string;
 }) {
+  const tr = useTr();
   return (
     <button
       onClick={() =>
-        toast.info("Read-only demo", {
-          description: "This action is disabled and no data was changed.",
+        toast.info(tr("Read-only demo"), {
+          description: tr("This action is disabled and no data was changed."),
         })
       }
       className={`inline-flex h-9 items-center justify-center rounded-lg border border-border bg-background px-3 text-sm font-medium transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${className}`}
@@ -97,17 +99,18 @@ function PageHeader({
   description: string;
   action?: string;
 }) {
+  const tr = useTr();
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <h1 className="text-2xl font-semibold tracking-[-.035em] sm:text-3xl">
-          {title}
+          {tr(title)}
         </h1>
-        <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+        <p className="mt-1 text-sm text-muted-foreground">{tr(description)}</p>
       </div>
       {action ? (
         <DemoAction className="bg-primary text-primary-foreground hover:bg-primary/90">
-          {action}
+          {tr(action)}
         </DemoAction>
       ) : null}
     </div>
@@ -115,6 +118,7 @@ function PageHeader({
 }
 
 function DashboardView() {
+  const tr = useTr();
   return (
     <>
       <PageHeader
@@ -134,7 +138,7 @@ function DashboardView() {
             className="group relative overflow-hidden p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-[0_22px_55px_-34px_var(--primary)]"
           >
             <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/55 to-transparent opacity-50" />
-            <p className="text-sm text-muted-foreground">{label}</p>
+            <p className="text-sm text-muted-foreground">{tr(String(label))}</p>
             <div className="mt-3 flex items-end justify-between gap-3">
               <p className="font-mono text-2xl font-semibold tracking-[-.045em]">
                 {value}
@@ -166,9 +170,9 @@ function DashboardView() {
         <Card className="p-5">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="font-semibold">Revenue momentum</h2>
+              <h2 className="font-semibold">{tr("Revenue momentum")}</h2>
               <p className="text-xs text-muted-foreground">
-                MRR over the last six months
+                {tr("MRR over the last six months")}
               </p>
             </div>
             <Badge tone="green">+18.2%</Badge>
@@ -177,7 +181,7 @@ function DashboardView() {
             viewBox="0 0 700 230"
             className="mt-5 h-60 w-full"
             role="img"
-            aria-label="Monthly recurring revenue trending upward"
+            aria-label={tr("Monthly recurring revenue trending upward")}
           >
             <defs>
               <linearGradient id="demoArea" x1="0" y1="0" x2="0" y2="1">
@@ -202,20 +206,19 @@ function DashboardView() {
           <div className="pointer-events-none absolute -right-10 -top-12 size-40 rounded-full border border-primary/15" />
           <div className="flex items-center gap-2 text-sm font-semibold text-primary">
             <Sparkles className="size-4" />
-            Nexus Intelligence <Badge tone="blue">Demo insight</Badge>
+            {tr("Nexus Intelligence")} <Badge tone="blue">{tr("Demo insight")}</Badge>
           </div>
           <h2 className="relative mt-7 text-xl font-semibold tracking-[-.025em]">
-            Trial conversion dropped 14%
+            {tr("Trial conversion dropped 14%")}
           </h2>
           <p className="mt-3 text-sm leading-6 text-muted-foreground">
-            Users who do not invite another team member within 24 hours convert
-            37% less often.
+            {tr("Users who do not invite another team member within 24 hours convert 37% less often.")}
           </p>
           <div className="relative mt-6 flex items-center justify-between border-t border-primary/15 pt-4 text-xs">
-            <span className="text-muted-foreground">Confidence</span>
+            <span className="text-muted-foreground">{tr("Confidence")}</span>
             <span className="font-semibold text-primary">94%</span>
           </div>
-          <DemoAction className="mt-4 w-full">Investigate insight</DemoAction>
+          <DemoAction className="mt-4 w-full">{tr("Investigate insight")}</DemoAction>
         </Card>
       </div>
     </>
@@ -223,6 +226,7 @@ function DashboardView() {
 }
 
 function TableView({ type }: { type: "customers" | "transactions" }) {
+  const tr = useTr();
   const rows = type === "customers" ? customers : transactions;
   const headers =
     type === "customers"
@@ -244,13 +248,13 @@ function TableView({ type }: { type: "customers" | "transactions" }) {
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <input
-              aria-label={`Search ${type}`}
-              placeholder={`Search ${type}…`}
+              aria-label={tr(type === "customers" ? "Search customers" : "Search transactions")}
+              placeholder={tr(type === "customers" ? "Search customers…" : "Search transactions…")}
               className="h-10 w-full rounded-lg border bg-background pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
           <DemoAction>
-            All statuses <ChevronDown className="ml-2 size-4" />
+            {tr("All statuses")} <ChevronDown className="ml-2 size-4" />
           </DemoAction>
         </div>
         <div className="overflow-x-auto">
@@ -259,7 +263,7 @@ function TableView({ type }: { type: "customers" | "transactions" }) {
               <tr>
                 {headers.map((h) => (
                   <th key={h} className="px-5 py-3 font-medium">
-                    {h}
+                    {tr(h)}
                   </th>
                 ))}
               </tr>
@@ -293,7 +297,7 @@ function TableView({ type }: { type: "customers" | "transactions" }) {
                                 : "green"
                           }
                         >
-                          {cell}
+                          {tr(cell)}
                         </Badge>
                       ) : (
                         <span
@@ -301,14 +305,14 @@ function TableView({ type }: { type: "customers" | "transactions" }) {
                             j === 0 ? "font-medium" : "text-muted-foreground"
                           }
                         >
-                          {cell}
+                          {tr(cell)}
                         </span>
                       )}
                     </td>
                   ))}
                   <td className="px-4">
                     <button
-                      aria-label={`Actions for row ${i + 1}`}
+                      aria-label={tr("Actions for row {n}", { n: i + 1 })}
                       className="rounded-lg p-2 hover:bg-muted"
                     >
                       <MoreHorizontal className="size-4" />
@@ -320,8 +324,8 @@ function TableView({ type }: { type: "customers" | "transactions" }) {
           </table>
         </div>
         <div className="flex items-center justify-between border-t px-5 py-3 text-xs text-muted-foreground">
-          <span>Showing {rows.length} of 1,248</span>
-          <span>Page 1 of 250</span>
+          <span>{tr("Showing {n} of 1,248", { n: rows.length })}</span>
+          <span>{tr("Page 1 of 250")}</span>
         </div>
       </Card>
     </>
@@ -329,6 +333,7 @@ function TableView({ type }: { type: "customers" | "transactions" }) {
 }
 
 function SubscriptionsView() {
+  const tr = useTr();
   return (
     <>
       <PageHeader
@@ -348,20 +353,20 @@ function SubscriptionsView() {
             className={`p-5 ${i === 2 ? "border-primary/35" : ""}`}
           >
             <div className="flex items-center justify-between">
-              <h2 className="font-semibold">{plan}</h2>
-              {i === 2 ? <Badge tone="blue">Most popular</Badge> : null}
+              <h2 className="font-semibold">{tr(plan)}</h2>
+              {i === 2 ? <Badge tone="blue">{tr("Most popular")}</Badge> : null}
             </div>
             <p className="mt-7 text-3xl font-semibold">{count}</p>
-            <p className="mt-1 text-xs text-muted-foreground">customers</p>
+            <p className="mt-1 text-xs text-muted-foreground">{tr("customers")}</p>
             <div className="mt-5 border-t pt-4 text-sm">
-              <span className="text-muted-foreground">Revenue</span>
+              <span className="text-muted-foreground">{tr("Revenue")}</span>
               <span className="float-right font-medium">{revenue}</span>
             </div>
           </Card>
         ))}
       </div>
       <Card className="mt-4 p-5">
-        <h2 className="font-semibold">Subscription health</h2>
+        <h2 className="font-semibold">{tr("Subscription health")}</h2>
         <div className="mt-6 grid gap-5 sm:grid-cols-3">
           {[
             ["Active", "1,129", "90.5%"],
@@ -370,7 +375,7 @@ function SubscriptionsView() {
           ].map(([label, value, pct]) => (
             <div key={label}>
               <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">{label}</span>
+                <span className="text-muted-foreground">{tr(label)}</span>
                 <span className="font-medium">{value}</span>
               </div>
               <div className="mt-3 h-2 rounded-full bg-muted">
@@ -388,6 +393,8 @@ function SubscriptionsView() {
 }
 
 function AnalyticsView() {
+  const tr = useTr();
+  const numberLocale = useNumberLocale();
   return (
     <>
       <PageHeader
@@ -397,8 +404,8 @@ function AnalyticsView() {
       />
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         <Card className="p-5">
-          <h2 className="font-semibold">Acquisition funnel</h2>
-          <p className="mt-1 text-xs text-muted-foreground">Last 30 days</p>
+          <h2 className="font-semibold">{tr("Acquisition funnel")}</h2>
+          <p className="mt-1 text-xs text-muted-foreground">{tr("Last 30 days")}</p>
           <div className="mt-6 space-y-3">
             {[
               ["Visitors", 24820, 100],
@@ -409,14 +416,14 @@ function AnalyticsView() {
             ].map(([label, value, width], i) => (
               <div key={String(label)} className="flex items-center gap-3">
                 <span className="w-16 text-xs text-muted-foreground">
-                  {label}
+                  {tr(String(label))}
                 </span>
                 <div
                   className="h-9 rounded-lg bg-primary/15"
                   style={{ width: `${width}%` }}
                 >
                   <div className="flex h-full items-center px-3 text-xs font-medium">
-                    {Number(value).toLocaleString()}
+                    {Number(value).toLocaleString(numberLocale)}
                   </div>
                 </div>
                 {i > 0 ? (
@@ -434,9 +441,9 @@ function AnalyticsView() {
           </div>
         </Card>
         <Card className="p-5">
-          <h2 className="font-semibold">MRR movement</h2>
+          <h2 className="font-semibold">{tr("MRR movement")}</h2>
           <p className="mt-1 text-xs text-muted-foreground">
-            Net growth +$4,920
+            {tr("Net growth +$4,920")}
           </p>
           <div className="mt-8 grid grid-cols-2 gap-4">
             {[
@@ -446,7 +453,7 @@ function AnalyticsView() {
               ["Churn", "−$5,440", "red"],
             ].map(([label, value, tone]) => (
               <div key={label} className="rounded-xl border p-4">
-                <p className="text-xs text-muted-foreground">{label}</p>
+                <p className="text-xs text-muted-foreground">{tr(label)}</p>
                 <p
                   className={`mt-2 text-xl font-semibold ${tone === "green" ? "text-emerald-500" : tone === "red" ? "text-red-500" : "text-amber-500"}`}
                 >
@@ -460,12 +467,12 @@ function AnalyticsView() {
       <Card className="mt-4 p-5">
         <div className="flex justify-between">
           <div>
-            <h2 className="font-semibold">Retention cohort</h2>
+            <h2 className="font-semibold">{tr("Retention cohort")}</h2>
             <p className="mt-1 text-xs text-muted-foreground">
-              Monthly customer retention
+              {tr("Monthly customer retention")}
             </p>
           </div>
-          <Badge tone="green">Stable</Badge>
+          <Badge tone="green">{tr("Stable")}</Badge>
         </div>
         <div className="mt-6 grid grid-cols-7 gap-1 text-center text-[10px]">
           {[
@@ -487,6 +494,7 @@ function AnalyticsView() {
 }
 
 function TeamView() {
+  const tr = useTr();
   return (
     <>
       <PageHeader
@@ -512,9 +520,9 @@ function TeamView() {
               <p className="truncate text-sm font-medium">{name}</p>
               <p className="truncate text-xs text-muted-foreground">{email}</p>
             </div>
-            <Badge tone={role === "Owner" ? "blue" : "neutral"}>{role}</Badge>
+            <Badge tone={role === "Owner" ? "blue" : "neutral"}>{tr(role)}</Badge>
             <button
-              aria-label={`More options for ${name}`}
+              aria-label={tr("More options for {name}", { name })}
               className="rounded-lg p-2 hover:bg-muted"
             >
               <MoreHorizontal className="size-4" />
@@ -527,6 +535,7 @@ function TeamView() {
 }
 
 function SettingsView() {
+  const tr = useTr();
   return (
     <>
       <PageHeader
@@ -549,17 +558,17 @@ function SettingsView() {
               key={item}
               className={`block w-full rounded-lg px-3 py-2.5 text-left text-sm ${i === 0 ? "bg-primary/10 font-medium text-primary" : "text-muted-foreground hover:bg-muted"}`}
             >
-              {item}
+              {tr(item)}
             </button>
           ))}
         </Card>
         <Card className="p-5 sm:p-6">
           <div className="flex items-center gap-2">
             <Settings className="size-4 text-primary" />
-            <h2 className="font-semibold">General</h2>
+            <h2 className="font-semibold">{tr("General")}</h2>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
-            Workspace defaults used across Nexus.
+            {tr("Workspace defaults used across Nexus.")}
           </p>
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             {[
@@ -569,9 +578,9 @@ function SettingsView() {
               ["Currency", "USD — US Dollar"],
             ].map(([label, value]) => (
               <label key={label} className="text-sm font-medium">
-                {label}
+                {tr(label)}
                 <input
-                  value={value}
+                  value={tr(value)}
                   readOnly
                   className="mt-2 h-10 w-full rounded-lg border bg-muted/35 px-3 text-sm font-normal text-muted-foreground outline-none"
                 />
@@ -581,9 +590,9 @@ function SettingsView() {
           <div className="mt-8 flex items-center justify-between border-t pt-5">
             <p className="text-xs text-muted-foreground">
               <LockKeyhole className="mr-1 inline size-3" />
-              Read-only portfolio demo
+              {tr("Read-only portfolio demo")}
             </p>
-            <DemoAction>Save changes</DemoAction>
+            <DemoAction>{tr("Save changes")}</DemoAction>
           </div>
         </Card>
       </div>
@@ -602,14 +611,14 @@ function CurrentView({ view }: { view: DemoView }) {
 }
 
 export function DemoWorkspace({ view }: { view: DemoView }) {
+  const tr = useTr();
   const [open, setOpen] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
   return (
     <div className="min-h-screen bg-background text-foreground">
       <div className="border-b border-violet-400/20 bg-violet-400/8 px-4 py-2 text-center text-xs text-muted-foreground">
         <Sparkles className="mr-1.5 inline size-3.5 text-primary" />
-        <strong className="text-foreground">Portfolio demo:</strong> fictional
-        data, read-only actions, no production access.
+        <strong className="text-foreground">{tr("Portfolio demo:")}</strong> {tr("fictional data, read-only actions, no production access.")}
       </div>
       <div className="flex min-h-[calc(100vh-33px)]">
         <aside
@@ -623,16 +632,15 @@ export function DemoWorkspace({ view }: { view: DemoView }) {
             <button
               onClick={() => setOpen(false)}
               className="rounded-lg p-2 md:hidden"
-              aria-label="Close navigation"
+              aria-label={tr("Close navigation")}
             >
               <X className="size-4" />
             </button>
           </div>
           <button
             onClick={() =>
-              toast.info("Demo workspace", {
-                description:
-                  "Workspace switching is available after signing in.",
+              toast.info(tr("Demo workspace"), {
+                description: tr("Workspace switching is available after signing in."),
               })
             }
             className="mt-7 flex items-center gap-3 rounded-xl border bg-background p-3 text-left"
@@ -645,12 +653,12 @@ export function DemoWorkspace({ view }: { view: DemoView }) {
                 Orbit Labs
               </span>
               <span className="block text-xs text-muted-foreground">
-                Demo workspace
+                {tr("Demo workspace")}
               </span>
             </span>
             <ChevronDown className="size-4 text-muted-foreground" />
           </button>
-          <nav className="mt-6 flex-1 space-y-1.5" aria-label="Demo navigation">
+          <nav className="mt-6 flex-1 space-y-1.5" aria-label={tr("Demo navigation")}>
             {navigation.map(({ view: itemView, label, icon: Icon }) => (
               <Link
                 key={itemView}
@@ -660,26 +668,26 @@ export function DemoWorkspace({ view }: { view: DemoView }) {
                 className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all hover:translate-x-0.5 ${view === itemView ? "bg-primary/10 font-semibold text-primary shadow-[inset_3px_0_0_var(--primary)]" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}
               >
                 <Icon className="size-4" />
-                {label}
+                {tr(label)}
               </Link>
             ))}
           </nav>
           <div className="rounded-xl border bg-background p-3 text-xs text-muted-foreground">
-            <p className="font-medium text-foreground">Want the real flow?</p>
+            <p className="font-medium text-foreground">{tr("Want the real flow?")}</p>
             <p className="mt-1 leading-5">
-              Create an account to test secure workspace onboarding.
+              {tr("Create an account to test secure workspace onboarding.")}
             </p>
             <Link
               href="/register"
               className="mt-3 inline-flex font-medium text-primary hover:underline"
             >
-              Create account →
+              {tr("Create account →")}
             </Link>
           </div>
         </aside>
         {open ? (
           <button
-            aria-label="Close navigation overlay"
+            aria-label={tr("Close navigation overlay")}
             onClick={() => setOpen(false)}
             className="fixed inset-0 z-40 bg-black/50 md:hidden"
           />
@@ -689,38 +697,39 @@ export function DemoWorkspace({ view }: { view: DemoView }) {
             <button
               onClick={() => setOpen(true)}
               className="rounded-lg p-2 hover:bg-muted md:hidden"
-              aria-label="Open navigation"
+              aria-label={tr("Open navigation")}
             >
               <Menu className="size-5" />
             </button>
             <div className="relative hidden max-w-sm flex-1 sm:block">
               <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
               <input
-                aria-label="Search demo"
-                placeholder="Search Nexus…"
+                aria-label={tr("Search demo")}
+                placeholder={tr("Search Nexus…")}
                 className="h-9 w-full rounded-lg border bg-muted/30 pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-ring"
               />
             </div>
             <div className="ml-auto flex items-center gap-1">
+              <LangSwitch className="mr-1" />
               <Link
                 href="/"
                 className="hidden rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted sm:block"
               >
-                Exit demo
+                {tr("Exit demo")}
               </Link>
               <button
                 onClick={() =>
                   setTheme(resolvedTheme === "dark" ? "light" : "dark")
                 }
                 className="rounded-lg p-2 hover:bg-muted"
-                aria-label="Toggle color theme"
+                aria-label={tr("Toggle color theme")}
               >
                 <SunMoon className="size-4" />
               </button>
               <button
-                onClick={() => toast.info("No new notifications in the demo.")}
+                onClick={() => toast.info(tr("No new notifications in the demo."))}
                 className="rounded-lg p-2 hover:bg-muted"
-                aria-label="Notifications"
+                aria-label={tr("Notifications")}
               >
                 <Bell className="size-4" />
               </button>

@@ -1,6 +1,8 @@
-export function AppShellLoading() {
+import { getTr } from "@/lib/i18n/server";
+export async function AppShellLoading() {
+  const tr = await getTr();
   return (
-    <div className="min-h-screen bg-background" aria-label="Loading workspace">
+    <div className="min-h-screen bg-background" aria-label={tr("Loading workspace")}>
       <aside className="fixed inset-y-0 left-0 hidden w-64 border-r border-border bg-sidebar p-4 lg:block">
         <div className="h-8 w-28 animate-pulse rounded-lg bg-muted" />
         <div className="mt-6 h-14 animate-pulse rounded-xl bg-muted" />

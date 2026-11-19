@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useTr } from "@/components/lang-provider";
 
 export default function GlobalError({
   error,
@@ -9,6 +10,7 @@ export default function GlobalError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const tr = useTr();
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -23,7 +25,7 @@ export default function GlobalError({
             padding: 24,
             background: "#0e0e11",
             color: "#f4f4f5",
-            fontFamily: "Arial,sans-serif",
+            fontFamily: tr("Arial,sans-serif"),
             textAlign: "center",
           }}
         >
@@ -40,14 +42,13 @@ export default function GlobalError({
                 fontWeight: 700,
               }}
             >
-              N
+              {tr("N")}
             </div>
             <h1 style={{ marginTop: 28, fontSize: 32 }}>
-              The signal was interrupted.
+              {tr("The signal was interrupted.")}
             </h1>
             <p style={{ color: "#a1a1aa", lineHeight: 1.6 }}>
-              Nexus could not load this view. Try again, or return to the public
-              demo.
+              {tr("Nexus could not load this view. Try again, or return to the public demo.")}
             </p>
             <button
               onClick={reset}
@@ -61,7 +62,7 @@ export default function GlobalError({
                 fontWeight: 600,
               }}
             >
-              Try again
+              {tr("Try again")}
             </button>
           </div>
         </main>

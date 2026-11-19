@@ -1,7 +1,9 @@
 import { Card } from "@/components/ui";
-export default function TransactionsLoading() {
+import { getTr } from "@/lib/i18n/server";
+export default async function TransactionsLoading() {
+  const tr = await getTr();
   return (
-    <div aria-label="Loading transactions">
+    <div aria-label={tr("Loading transactions")}>
       <div className="mb-7 h-20 animate-pulse rounded-2xl bg-muted" />
       <div className="mb-4 grid gap-4 sm:grid-cols-3">
         {[1, 2, 3].map((item) => (

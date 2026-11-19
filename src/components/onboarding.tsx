@@ -5,12 +5,14 @@ import { Button, Card, Input } from "./ui";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { switchWorkspace } from "@/app/(app)/workspace-actions";
+import { useTr } from "@/components/lang-provider";
 const steps = ["Welcome", "Workspace", "Goal", "Plan", "Team"];
 export function Onboarding({
   plans,
 }: {
   plans: { id: string; name: string; priceMonthly: number }[];
 }) {
+  const tr = useTr();
   const [i, setI] = useState(0),
     [workspaceName, setWorkspaceName] = useState(""),
     [goal, setGoal] = useState("Grow revenue"),
@@ -25,9 +27,9 @@ export function Onboarding({
       const supabase = createClient();
       const { data: auth } = await supabase.auth.getUser();
       if (!auth.user)
-        throw new Error("Your session expired. Please sign in again.");
+        throw new Error(tr("Your session expired. Please sign in again."));
       const name = workspaceName.trim();
-      if (name.length < 2) throw new Error("Enter a workspace name.");
+      if (name.length < 2) throw new Error(tr("Enter a workspace name."));
       const base = name
         .toLowerCase()
         .normalize("NFD")
@@ -45,7 +47,7 @@ export function Onboarding({
         },
       );
       if (workspaceError) throw workspaceError;
-      if (!workspaceId) throw new Error("The workspace could not be selected.");
+      if (!workspaceId) throw new Error(tr("The workspace could not be selected."));
       await switchWorkspace(workspaceId);
       router.push("/dashboard");
       router.refresh();
@@ -53,7 +55,7 @@ export function Onboarding({
       setError(
         reason instanceof Error
           ? reason.message
-          : "Could not create the workspace.",
+          : tr("Could not create the workspace."),
       );
       setSaving(false);
     }
@@ -90,7 +92,7 @@ export function Onboarding({
               "Name your workspace",
               "What is your main goal?",
               "Choose your starting plan",
-              "Invite your team",
+              tr("Invite your team"),
             ][i]
           }
         </h1>
@@ -101,25 +103,24 @@ export function Onboarding({
               "You can change this later in workspace settings.",
               "This helps us tailor your dashboard experience.",
               "Start free and upgrade whenever your team is ready.",
-              "Collaboration works better when everyone is here.",
+              tr("Collaboration works better when everyone is here."),
             ][i]
           }
         </p>
         <div className="mt-8 min-h-32">
           {i === 0 && (
             <div className="rounded-xl bg-primary/10 p-5 text-sm">
-              You’re joining 4,800+ product-led teams making faster, clearer
-              decisions with Nexus.
+              {tr("You’re joining 4,800+ product-led teams making faster, clearer decisions with Nexus.")}
             </div>
           )}
           {i === 1 && (
             <label className="text-sm font-medium">
-              Workspace name
+              {tr("Workspace name")}
               <Input
                 className="mt-2"
                 value={workspaceName}
                 onChange={(event) => setWorkspaceName(event.target.value)}
-                placeholder="Acme Inc."
+                placeholder={tr("Acme Inc.")}
               />
             </label>
           )}
@@ -129,7 +130,7 @@ export function Onboarding({
                 "Grow revenue",
                 "Understand customers",
                 "Reduce churn",
-                "Scale operations",
+                tr("Scale operations"),
               ].map((x) => (
                 <button
                   key={x}
@@ -158,8 +159,8 @@ export function Onboarding({
           )}
           {i === 4 && (
             <div className="space-y-3">
-              <Input type="email" placeholder="teammate@company.com" />
-              <Input type="email" placeholder="another@company.com" />
+              <Input type="email" placeholder={tr("teammate@company.com")} />
+              <Input type="email" placeholder={tr("another@company.com")} />
             </div>
           )}
         </div>
@@ -178,7 +179,7 @@ export function Onboarding({
             onClick={() => setI(i - 1)}
           >
             <ArrowLeft className="size-4" />
-            Back
+            {tr("Back")}
           </Button>
           <Button
             disabled={saving || (i === 1 && workspaceName.trim().length < 2)}
@@ -186,9 +187,9 @@ export function Onboarding({
           >
             {i === steps.length - 1
               ? saving
-                ? "Creating…"
-                : "Open dashboard"
-              : "Continue"}
+                ? tr("Creating…")
+                : tr("Open dashboard")
+              : tr("Continue")}
             <ArrowRight className="size-4" />
           </Button>
         </div>

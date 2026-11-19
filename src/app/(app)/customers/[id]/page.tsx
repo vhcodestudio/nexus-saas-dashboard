@@ -4,12 +4,15 @@ import { Activity, ArrowLeft, CalendarDays, Mail } from "lucide-react";
 import { Avatar, Badge, Card } from "@/components/ui";
 import { PageHead, SectionTitle } from "@/components/page-kit";
 import { getCustomerDetails } from "@/lib/queries";
+import { getTr } from "@/lib/i18n/server";
+import { T } from "@/components/lang-provider";
 
 export default async function Customer({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const tr = await getTr();
   const { id } = await params;
   const details = await getCustomerDetails(id);
   if (!details) notFound();
@@ -28,7 +31,7 @@ export default async function Customer({
         className="mb-4 flex w-fit items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
       >
         <ArrowLeft className="size-4" />
-        Back to customers
+        {tr("Back to customers")}
       </Link>
       <PageHead
         title={customer.name}
@@ -39,7 +42,7 @@ export default async function Customer({
             className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-border bg-background px-3 text-sm font-medium hover:bg-muted"
           >
             <Mail className="size-4" />
-            Email customer
+            {tr("Email customer")}
           </a>
         }
       />
@@ -56,9 +59,9 @@ export default async function Customer({
               </div>
             </div>
             <dl className="mt-6 grid grid-cols-2 gap-5 text-sm">
-              <Info label="Company">{customer.company}</Info>
-              <Info label="Plan">{customer.plan}</Info>
-              <Info label="Status">
+              <Info label={tr("Company")}>{customer.company}</Info>
+              <Info label={tr("Plan")}><T>{customer.plan}</T></Info>
+              <Info label={tr("Status")}>
                 <Badge
                   tone={
                     customer.status === "Active"
@@ -68,10 +71,10 @@ export default async function Customer({
                         : "red"
                   }
                 >
-                  {customer.status}
+                  <T>{customer.status}</T>
                 </Badge>
               </Info>
-              <Info label="Monthly revenue">
+              <Info label={tr("Monthly revenue")}>
                 ${customer.mrr.toLocaleString()}
               </Info>
             </dl>
@@ -79,9 +82,9 @@ export default async function Customer({
           <Card className="p-5">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="font-semibold">Customer health</h2>
+                <h2 className="font-semibold">{tr("Customer health")}</h2>
                 <p className="mt-0.5 text-xs text-muted-foreground">
-                  Based on status, MRR and recent activity
+                  {tr("Based on status, MRR and recent activity")}
                 </p>
               </div>
               <span className="text-2xl font-semibold">
@@ -97,42 +100,41 @@ export default async function Customer({
             <p className="mt-3 text-sm font-medium">{customer.healthLabel}</p>
           </Card>
           <Card className="p-5">
-            <h2 className="font-semibold">Internal notes</h2>
+            <h2 className="font-semibold">{tr("Internal notes")}</h2>
             <textarea
               className="mt-3 min-h-28 w-full resize-none rounded-lg border bg-background p-3 text-sm outline-none"
-              placeholder="No notes have been added for this customer."
+              placeholder={tr("No notes have been added for this customer.")}
               disabled
             />
             <p className="mt-2 text-xs text-muted-foreground">
-              Coming soon — no notes are stored until persistent note storage is
-              configured.
+              {tr("Coming soon — no notes are stored until persistent note storage is configured.")}
             </p>
           </Card>
         </div>
         <div className="space-y-4">
           <Card>
             <SectionTitle
-              title="Account overview"
-              description="Current relationship and subscription state"
+              title={tr("Account overview")}
+              description={tr("Current relationship and subscription state")}
             />
             <dl className="grid gap-5 p-5 text-sm sm:grid-cols-2">
-              <Info label="Joined">{customer.joined}</Info>
-              <Info label="Last seen">{customer.activity}</Info>
-              <Info label="Last payment">
+              <Info label={tr("Joined")}>{customer.joined}</Info>
+              <Info label={tr("Last seen")}>{customer.activity}</Info>
+              <Info label={tr("Last payment")}>
                 {lastPayment
                   ? "$" +
                     lastPayment.value.toLocaleString() +
                     " · " +
                     lastPayment.date
-                  : "No payments yet"}
+                  : tr("No payments yet")}
               </Info>
-              <Info label="Subscription">
+              <Info label={tr("Subscription")}>
                 {subscription
                   ? subscription.plan + " · " + subscription.status
-                  : "No active subscription"}
+                  : tr("No active subscription")}
               </Info>
               {subscription && (
-                <Info label="Current period ends">
+                <Info label={tr("Current period ends")}>
                   {subscription.currentPeriodEnd}
                 </Info>
               )}
@@ -140,8 +142,8 @@ export default async function Customer({
           </Card>
           <Card>
             <SectionTitle
-              title="Recent activity"
-              description="Latest customer events in this workspace"
+              title={tr("Recent activity")}
+              description={tr("Latest customer events in this workspace")}
             />
             {activities.length ? (
               <div className="divide-y divide-border">
@@ -151,7 +153,7 @@ export default async function Customer({
                       <Activity className="size-4 text-primary" />
                     </span>
                     <div>
-                      <p className="text-sm font-medium">{activity.kind}</p>
+                      <p className="text-sm font-medium"><T>{activity.kind}</T></p>
                       <p className="mt-0.5 text-xs text-muted-foreground">
                         {activity.date}
                       </p>
@@ -162,14 +164,14 @@ export default async function Customer({
             ) : (
               <Empty
                 icon={<Activity className="size-5" />}
-                text="No activity has been recorded for this customer yet."
+                text={tr("No activity has been recorded for this customer yet.")}
               />
             )}
           </Card>
           <Card>
             <SectionTitle
-              title="Payment history"
-              description="Latest subscription transactions"
+              title={tr("Payment history")}
+              description={tr("Latest subscription transactions")}
             />
             {transactions.length ? (
               <div className="divide-y divide-border">
@@ -199,7 +201,7 @@ export default async function Customer({
                               : "amber"
                         }
                       >
-                        {transaction.status}
+                        <T>{transaction.status}</T>
                       </Badge>
                     </div>
                   </div>
@@ -208,7 +210,7 @@ export default async function Customer({
             ) : (
               <Empty
                 icon={<CalendarDays className="size-5" />}
-                text="No payment transactions are available yet."
+                text={tr("No payment transactions are available yet.")}
               />
             )}
           </Card>
@@ -227,7 +229,7 @@ function Info({
 }) {
   return (
     <div>
-      <dt className="text-muted-foreground">{label}</dt>
+      <dt className="text-muted-foreground"><T>{label}</T></dt>
       <dd className="mt-1 font-medium">{children}</dd>
     </div>
   );
@@ -239,7 +241,7 @@ function Empty({ icon, text }: { icon: React.ReactNode; text: string }) {
         <span className="mx-auto grid size-10 place-items-center rounded-xl bg-muted">
           {icon}
         </span>
-        <p className="mt-3 text-sm">{text}</p>
+        <p className="mt-3 text-sm"><T>{text}</T></p>
       </div>
     </div>
   );

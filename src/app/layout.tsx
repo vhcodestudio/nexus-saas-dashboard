@@ -6,6 +6,9 @@ const sans = Instrument_Sans({ variable: "--font-nexus-sans", subsets: ["latin"]
 const mono = Spline_Sans_Mono({ variable: "--font-nexus-mono", subsets: ["latin"] });
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
+import { LangProvider } from "@/components/lang-provider";
+import { htmlLang } from "@/lib/i18n/core";
+import { getLang } from "@/lib/i18n/server";
 export const metadata: Metadata = {
   metadataBase: new URL("https://nexus-saas-dashboard-tawny.vercel.app"),
   title: {
@@ -41,16 +44,17 @@ export const metadata: Metadata = {
   },
   icons: { icon: "/icon.svg" },
 };
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const lang = await getLang();
   return (
-    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth" className={`${sans.variable} ${mono.variable}`}>
+    <html lang={htmlLang[lang]} suppressHydrationWarning data-scroll-behavior="smooth" className={`${sans.variable} ${mono.variable}`}>
       <body>
         <ThemeProvider>
-          {children}
+          <LangProvider lang={lang}>{children}</LangProvider>
           <Toaster richColors position="bottom-right" />
         </ThemeProvider>
       </body>

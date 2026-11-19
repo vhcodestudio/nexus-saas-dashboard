@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import type { TransactionView } from "@/lib/queries";
 import { Badge, Button, Card, Input } from "@/components/ui";
+import { useTr } from "@/components/lang-provider";
+import { T } from "@/components/lang-provider";
 
 const pageSize = 10;
 const selectClass =
@@ -30,6 +32,7 @@ export function TransactionsTable({
 }: {
   transactions: TransactionView[];
 }) {
+  const tr = useTr();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
   const [method, setMethod] = useState("all");
@@ -125,8 +128,8 @@ export function TransactionsTable({
                   setQuery(event.target.value);
                   resetPage();
                 }}
-                placeholder="Search ID, customer or email…"
-                aria-label="Search transactions"
+                placeholder={tr("Search ID, customer or email…")}
+                aria-label={tr("Search transactions")}
               />
             </div>
             <div className="flex flex-wrap gap-2">
@@ -137,9 +140,9 @@ export function TransactionsTable({
                   setStatus(event.target.value);
                   resetPage();
                 }}
-                aria-label="Filter by status"
+                aria-label={tr("Filter by status")}
               >
-                <option value="all">All statuses</option>
+                <option value="all">{tr("All statuses")}</option>
                 {["Approved", "Pending", "Failed", "Refunded"].map((value) => (
                   <option key={value}>{value}</option>
                 ))}
@@ -151,9 +154,9 @@ export function TransactionsTable({
                   setMethod(event.target.value);
                   resetPage();
                 }}
-                aria-label="Filter by payment method"
+                aria-label={tr("Filter by payment method")}
               >
-                <option value="all">All methods</option>
+                <option value="all">{tr("All methods")}</option>
                 {methods.map((value) => (
                   <option key={value}>{value}</option>
                 ))}
@@ -165,9 +168,9 @@ export function TransactionsTable({
                   setCustomer(event.target.value);
                   resetPage();
                 }}
-                aria-label="Filter by customer"
+                aria-label={tr("Filter by customer")}
               >
-                <option value="all">All customers</option>
+                <option value="all">{tr("All customers")}</option>
                 {customers.map(([id, name]) => (
                   <option key={id ?? "unknown"} value={id ?? ""}>
                     {name}
@@ -179,7 +182,7 @@ export function TransactionsTable({
           <details>
             <summary className="flex w-fit cursor-pointer items-center gap-2 text-xs font-medium text-muted-foreground hover:text-foreground">
               <SlidersHorizontal className="size-4" />
-              Amount and date filters
+              {tr("Amount and date filters")}
             </summary>
             <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
               <Input
@@ -191,8 +194,8 @@ export function TransactionsTable({
                   setMinAmount(event.target.value);
                   resetPage();
                 }}
-                placeholder="Minimum amount"
-                aria-label="Minimum amount"
+                placeholder={tr("Minimum amount")}
+                aria-label={tr("Minimum amount")}
               />
               <Input
                 type="number"
@@ -203,11 +206,11 @@ export function TransactionsTable({
                   setMaxAmount(event.target.value);
                   resetPage();
                 }}
-                placeholder="Maximum amount"
-                aria-label="Maximum amount"
+                placeholder={tr("Maximum amount")}
+                aria-label={tr("Maximum amount")}
               />
               <label className="text-xs text-muted-foreground">
-                From
+                {tr("From")}
                 <Input
                   className="mt-1"
                   type="date"
@@ -219,7 +222,7 @@ export function TransactionsTable({
                 />
               </label>
               <label className="text-xs text-muted-foreground">
-                To
+                {tr("To")}
                 <Input
                   className="mt-1"
                   type="date"
@@ -235,16 +238,16 @@ export function TransactionsTable({
         </div>
         {transactions.length === 0 ? (
           <Empty
-            title="No transactions yet"
-            description="Payments will appear here after they are processed in this workspace."
+            title={tr("No transactions yet")}
+            description={tr("Payments will appear here after they are processed in this workspace.")}
           />
         ) : visible.length === 0 ? (
           <Empty
-            title="No matching transactions"
-            description="Try changing or clearing the current filters."
+            title={tr("No matching transactions")}
+            description={tr("Try changing or clearing the current filters.")}
             action={
               <Button variant="outline" onClick={clear}>
-                Clear filters
+                {tr("Clear filters")}
               </Button>
             }
           />
@@ -259,13 +262,13 @@ export function TransactionsTable({
                     "Method",
                     "Status",
                     "Date",
-                    "Amount",
+                    tr("Amount"),
                   ].map((label) => (
                     <th
                       key={label}
                       className="px-5 py-3 font-medium last:text-right"
                     >
-                      {label}
+                      <T>{label}</T>
                     </th>
                   ))}
                 </tr>
@@ -294,10 +297,10 @@ export function TransactionsTable({
                       </p>
                     </td>
                     <td className="px-5 text-muted-foreground">
-                      {item.method}
+                      <T>{item.method}</T>
                     </td>
                     <td className="px-5">
-                      <Badge tone={tone(item.status)}>{item.status}</Badge>
+                      <Badge tone={tone(item.status)}><T>{item.status}</T></Badge>
                     </td>
                     <td className="px-5 text-muted-foreground">{item.date}</td>
                     <td className="px-5 text-right font-mono font-medium">
@@ -312,7 +315,7 @@ export function TransactionsTable({
         <div className="flex flex-col gap-3 border-t border-border px-4 py-3 text-sm sm:flex-row sm:items-center sm:justify-between">
           <p className="text-muted-foreground">
             {filtered.length
-              ? "Showing " +
+              ? tr("Showing ") +
                 ((currentPage - 1) * pageSize + 1) +
                 "–" +
                 Math.min(currentPage * pageSize, filtered.length) +
@@ -325,7 +328,7 @@ export function TransactionsTable({
               variant="outline"
               disabled={currentPage === 1}
               onClick={() => setPage((value) => value - 1)}
-              aria-label="Previous page"
+              aria-label={tr("Previous page")}
             >
               <ChevronLeft className="size-4" />
             </Button>
@@ -336,7 +339,7 @@ export function TransactionsTable({
               variant="outline"
               disabled={currentPage === pages}
               onClick={() => setPage((value) => value + 1)}
-              aria-label="Next page"
+              aria-label={tr("Next page")}
             >
               <ChevronRight className="size-4" />
             </Button>
@@ -366,11 +369,11 @@ function Empty({
         <span className="mx-auto grid size-11 place-items-center rounded-xl bg-muted">
           <CreditCard className="size-5 text-muted-foreground" />
         </span>
-        <h3 className="mt-4 font-semibold">{title}</h3>
+        <h3 className="mt-4 font-semibold"><T>{title}</T></h3>
         <p className="mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
-          {description}
+          <T>{description}</T>
         </p>
-        {action && <div className="mt-4">{action}</div>}
+        {action && <div className="mt-4"><T>{action}</T></div>}
       </div>
     </div>
   );
@@ -383,6 +386,7 @@ function TransactionDrawer({
   transaction: TransactionView | null;
   onClose: () => void;
 }) {
+  const tr = useTr();
   if (!transaction) return null;
   return (
     <Dialog.Root
@@ -397,20 +401,20 @@ function TransactionDrawer({
           <div className="flex items-start justify-between">
             <div>
               <Dialog.Title className="text-lg font-semibold">
-                Transaction details
+                {tr("Transaction details")}
               </Dialog.Title>
               <Dialog.Description className="mt-1 font-mono text-xs text-muted-foreground">
                 {transaction.id}
               </Dialog.Description>
             </div>
             <Dialog.Close asChild>
-              <Button variant="ghost" aria-label="Close transaction details">
+              <Button variant="ghost" aria-label={tr("Close transaction details")}>
                 <X className="size-4" />
               </Button>
             </Dialog.Close>
           </div>
           <div className="mt-6 rounded-2xl border border-border p-5 text-center">
-            <Badge tone={tone(transaction.status)}>{transaction.status}</Badge>
+            <Badge tone={tone(transaction.status)}><T>{transaction.status}</T></Badge>
             <p className="mt-3 text-3xl font-semibold">
               ${transaction.value.toLocaleString()}
             </p>
@@ -419,21 +423,21 @@ function TransactionDrawer({
             </p>
           </div>
           <dl className="mt-6 grid grid-cols-2 gap-5 text-sm">
-            <Info label="Customer">{transaction.customer}</Info>
-            <Info label="Contact">{transaction.customerName}</Info>
-            <Info label="Email">
-              {transaction.customerEmail ?? "Not available"}
+            <Info label={tr("Customer")}>{transaction.customer}</Info>
+            <Info label={tr("Contact")}>{transaction.customerName}</Info>
+            <Info label={tr("Email")}>
+              {transaction.customerEmail ?? tr("Not available")}
             </Info>
-            <Info label="Processed at">
+            <Info label={tr("Processed at")}>
               {new Intl.DateTimeFormat("en-US", {
                 dateStyle: "medium",
                 timeStyle: "short",
               }).format(new Date(transaction.processedAt))}
             </Info>
-            <Info label="Payment method">{transaction.method}</Info>
-            <Info label="Status">
+            <Info label={tr("Payment method")}><T>{transaction.method}</T></Info>
+            <Info label={tr("Status")}>
               <Badge tone={tone(transaction.status)}>
-                {transaction.status}
+                <T>{transaction.status}</T>
               </Badge>
             </Info>
           </dl>
@@ -442,7 +446,7 @@ function TransactionDrawer({
               href={"/customers/" + transaction.customerId}
               className="mt-7 inline-flex h-10 w-full items-center justify-center rounded-lg border border-border bg-background px-4 text-sm font-medium hover:bg-muted"
             >
-              Open customer profile
+              {tr("Open customer profile")}
             </Link>
           )}
         </Dialog.Content>
@@ -460,7 +464,7 @@ function Info({
 }) {
   return (
     <div>
-      <dt className="text-xs text-muted-foreground">{label}</dt>
+      <dt className="text-xs text-muted-foreground"><T>{label}</T></dt>
       <dd className="mt-1 break-words font-medium">{children}</dd>
     </div>
   );

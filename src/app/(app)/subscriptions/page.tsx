@@ -2,6 +2,7 @@ import { PageHead, Metric, SectionTitle } from "@/components/page-kit";
 import { Badge, Card } from "@/components/ui";
 import { SubscriptionPlans } from "@/components/subscription-plans";
 import { getSubscriptionOverview } from "@/lib/queries";
+import { getTr } from "@/lib/i18n/server";
 
 const statusTone = (status: string): "green" | "blue" | "red" | "amber" =>
   status === "active"
@@ -15,6 +16,7 @@ const statusLabel = (status: string) =>
   status.replace("_", " ").replace(/^./, (letter) => letter.toUpperCase());
 
 export default async function Subscriptions() {
+  const tr = await getTr();
   const overview = await getSubscriptionOverview();
   if (!overview) return null;
   const customerCount = overview.plans.reduce(
@@ -31,25 +33,25 @@ export default async function Subscriptions() {
   return (
     <>
       <PageHead
-        title="Subscriptions"
-        description="Workspace tier, customer subscriptions and recurring revenue from one source of truth."
+        title={tr("Subscriptions")}
+        description={tr("Workspace tier, customer subscriptions and recurring revenue from one source of truth.")}
       />
       <div className="mb-6 grid gap-4 sm:grid-cols-3">
         <Metric
-          label="Subscribed customers"
+          label={tr("Subscribed customers")}
           value={String(customerCount)}
           change="Live"
           detail="Across all database plans"
         />
         <Metric
-          label="Subscription revenue"
+          label={tr("Subscription revenue")}
           value={"$" + revenue.toLocaleString()}
           change="Live"
           detail="Current subscription amounts"
         />
         <Metric
-          label="Workspace plan"
-          value={currentPlan?.name ?? "Unknown"}
+          label={tr("Workspace plan")}
+          value={currentPlan?.name ?? tr("Unknown")}
           change="Current"
           detail="Monthly billing cycle"
         />
@@ -61,17 +63,17 @@ export default async function Subscriptions() {
       />
       <Card className="mt-6 overflow-hidden">
         <SectionTitle
-          title="Revenue by plan"
-          description="Customer distribution and status from this workspace"
+          title={tr("Revenue by plan")}
+          description={tr("Customer distribution and status from this workspace")}
         />
         <div className="overflow-x-auto">
           <table className="w-full min-w-[680px] text-left text-sm">
             <thead className="bg-muted/40 text-xs text-muted-foreground">
               <tr>
-                <th className="px-5 py-3 font-medium">Plan</th>
-                <th className="px-5 py-3 font-medium">Customers</th>
-                <th className="px-5 py-3 font-medium">Revenue</th>
-                <th className="px-5 py-3 font-medium">Subscription status</th>
+                <th className="px-5 py-3 font-medium">{tr("Plan")}</th>
+                <th className="px-5 py-3 font-medium">{tr("Customers")}</th>
+                <th className="px-5 py-3 font-medium">{tr("Revenue")}</th>
+                <th className="px-5 py-3 font-medium">{tr("Subscription status")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -81,7 +83,7 @@ export default async function Subscriptions() {
                     <div className="flex items-center gap-2">
                       <span className="font-medium">{plan.name}</span>
                       {plan.id === overview.currentPlanId && (
-                        <Badge tone="blue">Workspace plan</Badge>
+                        <Badge tone="blue">{tr("Workspace plan")}</Badge>
                       )}
                     </div>
                   </td>
@@ -99,7 +101,7 @@ export default async function Subscriptions() {
                         ))
                       ) : (
                         <span className="text-muted-foreground">
-                          No subscriptions
+                          {tr("No subscriptions")}
                         </span>
                       )}
                     </div>

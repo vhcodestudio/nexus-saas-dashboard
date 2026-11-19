@@ -1,3 +1,4 @@
+import { T } from "./lang-provider";
 import { cn } from "@/lib/utils";
 export function Card({
   className,
@@ -58,7 +59,7 @@ export function Badge({
         tones[tone],
       )}
     >
-      {children}
+      <T>{children}</T>
     </span>
   );
 }

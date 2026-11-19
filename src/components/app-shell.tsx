@@ -28,6 +28,8 @@ import { displayInitials } from "@/lib/display";
 import { WorkspaceSwitcher } from "./workspace-switcher";
 import type { UserWorkspace } from "@/lib/workspace-selection";
 import { NexusMark } from "./nexus-mark";
+import { useTr } from "@/components/lang-provider";
+import { T } from "@/components/lang-provider";
 const nav = [
   ["/dashboard", "Overview", LayoutDashboard],
   ["/customers", "Customers", Users],
@@ -50,6 +52,7 @@ export function AppShell({
   workspaces: UserWorkspace[];
   compactMode: boolean;
 }) {
+  const tr = useTr();
   const path = usePathname(),
     router = useRouter(),
     [mobile, setMobile] = useState(false),
@@ -101,7 +104,7 @@ export function AppShell({
           <button
             className="lg:hidden"
             onClick={() => setMobile(false)}
-            aria-label="Close navigation"
+            aria-label={tr("Close navigation")}
           >
             <X className="size-5" />
           </button>
@@ -110,7 +113,7 @@ export function AppShell({
           activeWorkspace={workspace}
           workspaces={workspaces}
         />
-        <nav className="mt-6 space-y-1.5" aria-label="Main navigation">
+        <nav className="mt-6 space-y-1.5" aria-label={tr("Main navigation")}>
           {nav.map(([href, label, Icon]) => (
             <Link
               key={href}
@@ -123,7 +126,7 @@ export function AppShell({
               )}
             >
               <Icon className="size-4" />
-              {label}
+              <T>{label}</T>
             </Link>
           ))}
         </nav>
@@ -133,11 +136,11 @@ export function AppShell({
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium">{user.name}</p>
               <p className="truncate text-xs text-muted-foreground">
-                {user.email ?? "Email unavailable"}
+                {user.email ?? tr("Email unavailable")}
               </p>
             </div>
             <button
-              aria-label="Account options"
+              aria-label={tr("Account options")}
               aria-expanded={accountOpen}
               onClick={() => setAccountOpen((value) => !value)}
             >
@@ -150,7 +153,7 @@ export function AppShell({
               onClick={signOut}
             >
               <LogOut className="size-4" />
-              Sign out
+              {tr("Sign out")}
             </button>
           )}
         </div>
@@ -159,7 +162,7 @@ export function AppShell({
         <button
           className="fixed inset-0 z-40 bg-black/50 lg:hidden"
           onClick={() => setMobile(false)}
-          aria-label="Close menu overlay"
+          aria-label={tr("Close menu overlay")}
         />
       )}
       <div className="lg:pl-64">
@@ -167,7 +170,7 @@ export function AppShell({
           <button
             className="lg:hidden"
             onClick={() => setMobile(true)}
-            aria-label="Open navigation"
+            aria-label={tr("Open navigation")}
           >
             <Menu className="size-5" />
           </button>
@@ -176,7 +179,7 @@ export function AppShell({
             className="hidden h-9 w-full max-w-sm items-center gap-2 rounded-lg border border-border px-3 text-sm text-muted-foreground sm:flex"
           >
             <Search className="size-4" />
-            Search anything…
+            {tr("Search anything…")}
             <span className="ml-auto flex items-center gap-1 rounded border px-1.5 py-0.5 text-[10px]">
               <Command className="size-3" />K
             </span>
@@ -187,18 +190,18 @@ export function AppShell({
               onClick={() =>
                 setTheme(resolvedTheme === "dark" ? "light" : "dark")
               }
-              aria-label="Toggle color theme"
+              aria-label={tr("Toggle color theme")}
             >
               <Sun className="size-4 dark:hidden" />
               <Moon className="hidden size-4 dark:block" />
             </Button>
-            <Button variant="ghost" aria-label="Notifications">
+            <Button variant="ghost" aria-label={tr("Notifications")}>
               <Bell className="size-4" />
               <span className="absolute mt-[-14px] ml-3 size-2 rounded-full bg-primary" />
             </Button>
             <Button className="hidden sm:flex">
               <Plus className="size-4" />
-              Create
+              {tr("Create")}
             </Button>
           </div>
         </header>
@@ -220,13 +223,13 @@ export function AppShell({
               <input
                 autoFocus
                 className="flex-1 bg-transparent outline-none"
-                placeholder="Search pages, customers, actions…"
+                placeholder={tr("Search pages, customers, actions…")}
               />
               <kbd className="text-xs text-muted-foreground">ESC</kbd>
             </div>
             <div className="p-2">
               <p className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Quick navigation
+                {tr("Quick navigation")}
               </p>
               {nav.slice(0, 5).map(([href, label, Icon]) => (
                 <Link
@@ -236,7 +239,7 @@ export function AppShell({
                   className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-muted"
                 >
                   <Icon className="size-4" />
-                  {label}
+                  <T>{label}</T>
                 </Link>
               ))}
             </div>

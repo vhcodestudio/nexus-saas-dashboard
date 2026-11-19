@@ -12,6 +12,8 @@ import {
 import { Badge, Card } from "@/components/ui";
 import { SectionTitle } from "@/components/page-kit";
 import type { buildAnalyticsModel } from "@/lib/analytics-model";
+import { useTr } from "@/components/lang-provider";
+import { T } from "@/components/lang-provider";
 
 type Model = ReturnType<typeof buildAnalyticsModel>;
 
@@ -34,6 +36,7 @@ export function AnalyticsSections({ model }: { model: Model }) {
 }
 
 function Funnel({ stages }: { stages: Model["stages"] }) {
+  const tr = useTr();
   const numericMax = Math.max(
     1,
     ...stages.flatMap((stage) => (stage.value === null ? [] : [stage.value])),
@@ -41,9 +44,9 @@ function Funnel({ stages }: { stages: Model["stages"] }) {
   return (
     <Card className="overflow-hidden">
       <SectionTitle
-        title="Acquisition funnel"
-        description="Workspace lifecycle conversion; visitor analytics requires tracking"
-        aside={<Badge tone="blue">Live + proxy</Badge>}
+        title={tr("Acquisition funnel")}
+        description={tr("Workspace lifecycle conversion; visitor analytics requires tracking")}
+        aside={<Badge tone="blue">{tr("Live + proxy")}</Badge>}
       />
       <div className="space-y-2 p-5">
         {stages.map((stage, index) => (
@@ -60,7 +63,7 @@ function Funnel({ stages }: { stages: Model["stages"] }) {
                 {index > 0 && (
                   <span className="w-24 text-right text-xs text-muted-foreground">
                     {stage.conversion === null
-                      ? "No baseline"
+                      ? tr("No baseline")
                       : stage.conversion +
                         "% convert · " +
                         stage.dropOff +
@@ -88,11 +91,12 @@ function Funnel({ stages }: { stages: Model["stages"] }) {
 }
 
 function Movement({ items }: { items: Model["movement"] }) {
+  const tr = useTr();
   return (
     <Card className="overflow-hidden">
       <SectionTitle
-        title="MRR movement"
-        description="Current 30-day portfolio snapshot"
+        title={tr("MRR movement")}
+        description={tr("Current 30-day portfolio snapshot")}
       />
       <div className="p-4">
         <ResponsiveContainer width="100%" height={220}>
@@ -132,14 +136,13 @@ function Movement({ items }: { items: Model["movement"] }) {
               <p className="mt-1 font-mono font-semibold">
                 {item.available
                   ? "$" + item.value.toLocaleString()
-                  : "Not tracked"}
+                  : tr("Not tracked")}
               </p>
             </div>
           ))}
         </div>
         <p className="mt-3 text-xs text-muted-foreground">
-          Expansion and contraction require subscription change history; Nexus
-          does not fabricate those values.
+          {tr("Expansion and contraction require subscription change history; Nexus does not fabricate those values.")}
         </p>
       </div>
     </Card>
@@ -147,19 +150,20 @@ function Movement({ items }: { items: Model["movement"] }) {
 }
 
 function Retention({ cohorts }: { cohorts: Model["cohorts"] }) {
+  const tr = useTr();
   return (
     <Card className="overflow-hidden">
       <SectionTitle
-        title="Retention cohort"
-        description="Monthly customer activity proxy based on last recorded activity"
-        aside={<Badge>Activity proxy</Badge>}
+        title={tr("Retention cohort")}
+        description={tr("Monthly customer activity proxy based on last recorded activity")}
+        aside={<Badge>{tr("Activity proxy")}</Badge>}
       />
       <div className="overflow-x-auto p-5">
         <table className="w-full min-w-[520px] text-sm">
           <thead className="text-xs text-muted-foreground">
             <tr>
-              <th className="pb-3 text-left font-medium">Cohort</th>
-              <th className="pb-3 text-center font-medium">Customers</th>
+              <th className="pb-3 text-left font-medium">{tr("Cohort")}</th>
+              <th className="pb-3 text-center font-medium">{tr("Customers")}</th>
               {["M0", "M1", "M2", "M3"].map((month) => (
                 <th key={month} className="pb-3 text-center font-medium">
                   {month}
@@ -207,23 +211,24 @@ function Attribution({
   dimensions: Model["dimensions"];
   conversion: number;
 }) {
+  const tr = useTr();
   const groups = [
-    { title: "Acquisition channel", data: dimensions.channels },
-    { title: "Device", data: dimensions.devices },
-    { title: "Browser", data: dimensions.browsers },
-    { title: "Country", data: dimensions.countries },
+    { title: tr("Acquisition channel"), data: dimensions.channels },
+    { title: tr("Device"), data: dimensions.devices },
+    { title: tr("Browser"), data: dimensions.browsers },
+    { title: tr("Country"), data: dimensions.countries },
   ];
   return (
     <Card className="overflow-hidden">
       <SectionTitle
-        title="Acquisition context"
-        description="Attribution metadata captured by workspace events"
+        title={tr("Acquisition context")}
+        description={tr("Attribution metadata captured by workspace events")}
         aside={<Badge tone="green">{conversion}% paid</Badge>}
       />
       <div className="grid gap-px bg-border sm:grid-cols-2">
         {groups.map((group) => (
           <section key={group.title} className="min-h-36 bg-card p-4">
-            <h3 className="text-sm font-semibold">{group.title}</h3>
+            <h3 className="text-sm font-semibold"><T>{group.title}</T></h3>
             {group.data.length ? (
               <div className="mt-3 space-y-2">
                 {group.data.slice(0, 3).map((item) => (
@@ -243,7 +248,7 @@ function Attribution({
               </div>
             ) : (
               <div className="mt-4 rounded-lg bg-muted/50 p-3">
-                <p className="text-xs font-medium">Tracking not connected</p>
+                <p className="text-xs font-medium">{tr("Tracking not connected")}</p>
                 <p className="mt-1 text-xs text-muted-foreground">
                   No real {group.title.toLowerCase()} metadata yet.
                 </p>

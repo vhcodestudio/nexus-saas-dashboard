@@ -1,7 +1,9 @@
 import { Card } from "@/components/ui";
-export default function AnalyticsLoading() {
+import { getTr } from "@/lib/i18n/server";
+export default async function AnalyticsLoading() {
+  const tr = await getTr();
   return (
-    <div aria-label="Loading analytics">
+    <div aria-label={tr("Loading analytics")}>
       <div className="mb-7 h-20 animate-pulse rounded-2xl bg-muted" />
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {[1, 2, 3, 4].map((item) => (

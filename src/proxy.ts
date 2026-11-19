@@ -15,6 +15,15 @@ const protectedRoutes = [
 ];
 
 export async function proxy(request: NextRequest) {
+  // ?lang=en|pt|es picks the interface language and remembers it in a cookie.
+  const langParam = request.nextUrl.searchParams.get("lang");
+  if (langParam && ["en", "pt", "es"].includes(langParam)) {
+    const clean = request.nextUrl.clone();
+    clean.searchParams.delete("lang");
+    const redirect = NextResponse.redirect(clean);
+    redirect.cookies.set("nexus-lang", langParam, { path: "/", maxAge: 31536000, sameSite: "lax" });
+    return redirect;
+  }
   let response = NextResponse.next({ request });
   let pendingCookies: Parameters<
     NonNullable<Parameters<typeof createServerClient>[2]["cookies"]["setAll"]>

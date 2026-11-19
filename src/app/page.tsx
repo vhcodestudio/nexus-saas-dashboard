@@ -11,13 +11,18 @@ import {
   Users,
 } from "lucide-react";
 import { NexusMark } from "@/components/nexus-mark";
+import { getTr } from "@/lib/i18n/server";
+import { LangSwitch } from "@/components/lang-provider";
+import { T } from "@/components/lang-provider";
 
-export const metadata: Metadata = {
-  title: "Revenue intelligence for modern SaaS teams",
-  description:
-    "Explore Nexus: revenue, customer health and growth intelligence in a secure multi-workspace SaaS. Try the fictional read-only demo without an account.",
-  alternates: { canonical: "/" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const tr = await getTr();
+  return {
+    title: tr("Revenue intelligence for modern SaaS teams"),
+    description: tr("Explore Nexus: revenue, customer health and growth intelligence in a secure multi-workspace SaaS. Try the fictional read-only demo without an account."),
+    alternates: { canonical: "/" },
+  };
+}
 
 const capabilities = [
   {
@@ -51,28 +56,30 @@ const architecture = [
   "Security headers",
 ];
 
-export default function Home() {
+export default async function Home() {
+  const tr = await getTr();
   return (
     <div className="nexus-landing">
       <a className="landing-skip" href="#main-content">
-        Skip to content
+        {tr("Skip to content")}
       </a>
       <header className="landing-header">
-        <nav className="landing-shell landing-nav" aria-label="Main navigation">
-          <Link href="/" className="landing-brand" aria-label="Nexus home">
+        <nav className="landing-shell landing-nav" aria-label={tr("Main navigation")}>
+          <Link href="/" className="landing-brand" aria-label={tr("Nexus home")}>
             <NexusMark className="size-9" />
             Nexus
           </Link>
+          <LangSwitch />
           <div className="landing-nav-links">
-            <a href="#product">Product</a>
-            <a href="#architecture">Architecture</a>
-            <Link href="/login">Sign in</Link>
+            <a href="#product">{tr("Product")}</a>
+            <a href="#architecture">{tr("Architecture")}</a>
+            <Link href="/login">{tr("Sign in")}</Link>
           </div>
           <Link
             href="/demo/dashboard"
             className="landing-button landing-button-small"
           >
-            View demo <ArrowRight size={16} aria-hidden="true" />
+            {tr("View demo")} <ArrowRight size={16} aria-hidden="true" />
           </Link>
         </nav>
       </header>
@@ -83,16 +90,15 @@ export default function Home() {
         >
           <div className="landing-hero-copy">
             <p className="landing-status">
-              <span aria-hidden="true" />A working portfolio product
+              <span aria-hidden="true" />{tr("A working portfolio product")}
             </p>
-            <h1 id="hero-heading">See the signals shaping your SaaS growth.</h1>
+            <h1 id="hero-heading">{tr("See the signals shaping your SaaS growth.")}</h1>
             <p className="landing-lead">
-              Revenue, customers and product intelligence. One clear view of
-              what changed — and where to look next.
+              {tr("Revenue, customers and product intelligence. One clear view of what changed — and where to look next.")}
             </p>
             <div className="landing-actions">
               <Link href="/demo/dashboard" className="landing-button">
-                Explore the read-only demo{" "}
+                {tr("Explore the read-only demo")}{" "}
                 <ArrowRight size={18} aria-hidden="true" />
               </Link>
               <a
@@ -102,24 +108,24 @@ export default function Home() {
                 className="landing-source"
               >
                 <GitFork size={16} aria-hidden="true" />
-                View source
+                {tr("View source")}
               </a>
             </div>
             <p className="landing-demo-note">
-              No account or credentials required. Demo data is fictional.
+              {tr("No account or credentials required. Demo data is fictional.")}
             </p>
             <dl className="landing-facts">
               <div>
-                <dt>Revenue</dt>
-                <dd>MRR &amp; subscriptions</dd>
+                <dt>{tr("Revenue")}</dt>
+                <dd>{tr("MRR & subscriptions")}</dd>
               </div>
               <div>
-                <dt>Customers</dt>
-                <dd>Context &amp; health</dd>
+                <dt>{tr("Customers")}</dt>
+                <dd>{tr("Context & health")}</dd>
               </div>
               <div>
-                <dt>Growth</dt>
-                <dd>Funnels &amp; retention</dd>
+                <dt>{tr("Growth")}</dt>
+                <dd>{tr("Funnels & retention")}</dd>
               </div>
             </dl>
           </div>
@@ -127,8 +133,8 @@ export default function Home() {
             <div className="landing-revenue-note">
               <BarChart3 size={20} aria-hidden="true" />
               <div>
-                <span>From signal to context</span>
-                <strong>Every metric has a story.</strong>
+                <span>{tr("From signal to context")}</span>
+                <strong>{tr("Every metric has a story.")}</strong>
               </div>
             </div>
             <Link
@@ -138,13 +144,13 @@ export default function Home() {
               <div className="landing-preview-bar">
                 <span>
                   <NexusMark className="size-5" />
-                  Nexus workspace
+                  {tr("Nexus workspace")}
                 </span>
-                <span>Read-only demo</span>
+                <span>{tr("Read-only demo")}</span>
               </div>
               <Image
                 src="/dashboard-preview.webp"
-                alt="Nexus revenue dashboard with recurring revenue, customer metrics and a revenue chart, using fictional data"
+                alt={tr("Nexus revenue dashboard with recurring revenue, customer metrics and a revenue chart, using fictional data")}
                 width={1440}
                 height={900}
                 sizes="(max-width: 960px) calc(100vw - 40px), 60vw"
@@ -152,23 +158,22 @@ export default function Home() {
               />
             </Link>
             <p className="landing-capture">
-              Actual product capture. Explore the interactive demo to inspect
-              the details.
+              {tr("Actual product capture. Explore the interactive demo to inspect the details.")}
             </p>
           </div>
         </section>
-        <section className="landing-stack" aria-label="Technology stack">
+        <section className="landing-stack" aria-label={tr("Technology stack")}>
           <div className="landing-shell">
-            <span>Built with</span>
+            <span>{tr("Built with")}</span>
             {[
               "Next.js",
               "React",
               "TypeScript",
               "Supabase",
               "PostgreSQL",
-              "Vercel",
+              tr("Vercel"),
             ].map((item) => (
-              <span key={item}>{item}</span>
+              <span key={item}><T>{item}</T></span>
             ))}
           </div>
         </section>
@@ -179,23 +184,22 @@ export default function Home() {
         >
           <div className="landing-section-heading">
             <h2 id="product-heading">
-              The operating view.
+              {tr("The operating view.")}
               <br />
-              Not another pile of dashboards.
+              {tr("Not another pile of dashboards.")}
             </h2>
             <p>
-              Move between revenue, customer operations and analytics without
-              losing the context behind a decision.
+              {tr("Move between revenue, customer operations and analytics without losing the context behind a decision.")}
             </p>
           </div>
           <div className="landing-capabilities">
             {capabilities.map(({ icon: Icon, title, body, href, action }) => (
               <article key={title}>
                 <Icon size={26} aria-hidden="true" />
-                <h3>{title}</h3>
-                <p>{body}</p>
+                <h3>{tr(title)}</h3>
+                <p>{tr(body)}</p>
                 <Link href={href}>
-                  {action}
+                  {tr(action)}
                   <ArrowRight size={16} aria-hidden="true" />
                 </Link>
               </article>
@@ -211,14 +215,12 @@ export default function Home() {
             <div>
               <LockKeyhole size={28} aria-hidden="true" />
               <h2 id="architecture-heading">
-                A demo you can explore.
+                {tr("A demo you can explore.")}
                 <br />
-                Boundaries you can inspect.
+                {tr("Boundaries you can inspect.")}
               </h2>
               <p>
-                The public demo uses fictional data and performs no writes.
-                Authenticated routes keep server-side protection and
-                workspace-aware authorization.
+                {tr("The public demo uses fictional data and performs no writes. Authenticated routes keep server-side protection and workspace-aware authorization.")}
               </p>
               <a
                 className="landing-source"
@@ -226,7 +228,7 @@ export default function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Read the security model{" "}
+                {tr("Read the security model")}{" "}
                 <ArrowRight size={16} aria-hidden="true" />
               </a>
             </div>
@@ -234,7 +236,7 @@ export default function Home() {
               {architecture.map((item) => (
                 <li key={item}>
                   <Check size={18} aria-hidden="true" />
-                  {item}
+                  {tr(item)}
                 </li>
               ))}
             </ul>
@@ -245,14 +247,13 @@ export default function Home() {
           aria-labelledby="final-heading"
         >
           <div>
-            <h2 id="final-heading">Take a closer look.</h2>
+            <h2 id="final-heading">{tr("Take a closer look.")}</h2>
             <p>
-              Open the workspace, inspect the flows and see how the pieces fit
-              together.
+              {tr("Open the workspace, inspect the flows and see how the pieces fit together.")}
             </p>
           </div>
           <Link href="/demo/dashboard" className="landing-button">
-            Open the workspace <ArrowRight size={18} aria-hidden="true" />
+            {tr("Open the workspace")} <ArrowRight size={18} aria-hidden="true" />
           </Link>
         </section>
       </main>
@@ -260,13 +261,13 @@ export default function Home() {
         <div className="landing-shell">
           <Link href="/" className="landing-brand">
             <NexusMark className="size-7" />
-            Nexus<span>Portfolio SaaS · Fictional demo</span>
+            Nexus<span>{tr("Portfolio SaaS · Fictional demo")}</span>
           </Link>
-          <nav aria-label="Footer navigation">
-            <Link href="/demo/dashboard">Demo</Link>
-            <Link href="/login">Sign in</Link>
-            <Link href="/privacy">Privacy</Link>
-            <Link href="/terms">Terms</Link>
+          <nav aria-label={tr("Footer navigation")}>
+            <Link href="/demo/dashboard">{tr("Demo")}</Link>
+            <Link href="/login">{tr("Sign in")}</Link>
+            <Link href="/privacy">{tr("Privacy")}</Link>
+            <Link href="/terms">{tr("Terms")}</Link>
           </nav>
         </div>
       </footer>

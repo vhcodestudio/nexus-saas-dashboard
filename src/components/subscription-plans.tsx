@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { changeWorkspacePlan } from "@/app/(app)/subscriptions/actions";
 import { Badge, Button, Card } from "@/components/ui";
 import { cn } from "@/lib/utils";
+import { useTr } from "@/components/lang-provider";
 
 export type PlanOverview = {
   id: string;
@@ -27,6 +28,7 @@ export function SubscriptionPlans({
   currentPlanId: string;
   canChangePlan: boolean;
 }) {
+  const tr = useTr();
   const [selected, setSelected] = useState<PlanOverview | null>(null);
   const [pending, startTransition] = useTransition();
   const currentPlan = plans.find((plan) => plan.id === currentPlanId);
@@ -36,11 +38,11 @@ export function SubscriptionPlans({
     startTransition(async () => {
       try {
         await changeWorkspacePlan(selected.id);
-        toast.success("Workspace plan changed to " + selected.name + ".");
+        toast.success(tr("Workspace plan changed to ") + selected.name + ".");
         setSelected(null);
       } catch (reason) {
         toast.error(
-          reason instanceof Error ? reason.message : "Could not change plan.",
+          reason instanceof Error ? tr(reason.message) : tr("Could not change plan."),
         );
       }
     });
@@ -50,9 +52,9 @@ export function SubscriptionPlans({
     return (
       <Card className="grid min-h-64 place-items-center p-8 text-center">
         <div>
-          <h2 className="font-semibold">Plans are unavailable</h2>
+          <h2 className="font-semibold">{tr("Plans are unavailable")}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            The plan catalog could not be loaded from the database.
+            {tr("The plan catalog could not be loaded from the database.")}
           </p>
         </div>
       </Card>
@@ -64,19 +66,17 @@ export function SubscriptionPlans({
         <div>
           <div className="flex items-center gap-2">
             <ShieldCheck className="size-4 text-primary" />
-            <p className="text-sm font-semibold">Current workspace plan</p>
+            <p className="text-sm font-semibold">{tr("Current workspace plan")}</p>
           </div>
           <p className="mt-1 text-xl font-semibold">
-            {currentPlan?.name ?? "Unknown"}
+            {currentPlan?.name ?? tr("Unknown")}
             <span className="ml-2 text-sm font-normal text-muted-foreground">
               ${currentPlan?.priceMonthly ?? 0} / month
             </span>
           </p>
         </div>
         <p className="max-w-md text-xs text-muted-foreground">
-          Monthly billing is the only cycle currently supported. Plan changes
-          update the Nexus workspace tier; an external payment provider is not
-          connected.
+          {tr("Monthly billing is the only cycle currently supported. Plan changes update the Nexus workspace tier; an external payment provider is not connected.")}
         </p>
       </div>
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -101,9 +101,9 @@ export function SubscriptionPlans({
                   </p>
                 </div>
                 {current ? (
-                  <Badge tone="green">Current</Badge>
+                  <Badge tone="green">{tr("Current")}</Badge>
                 ) : popular ? (
-                  <Badge tone="blue">Popular</Badge>
+                  <Badge tone="blue">{tr("Popular")}</Badge>
                 ) : null}
               </div>
               <p className="mt-5 text-3xl font-semibold">
@@ -115,13 +115,13 @@ export function SubscriptionPlans({
               </p>
               <div className="mt-4 grid grid-cols-2 gap-3 rounded-lg bg-muted/50 p-3 text-sm">
                 <div>
-                  <p className="text-xs text-muted-foreground">Revenue</p>
+                  <p className="text-xs text-muted-foreground">{tr("Revenue")}</p>
                   <p className="mt-0.5 font-mono font-medium">
                     ${plan.revenue.toLocaleString()}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Active</p>
+                  <p className="text-xs text-muted-foreground">{tr("Active")}</p>
                   <p className="mt-0.5 font-medium">
                     {plan.statuses.active ?? 0}
                   </p>
@@ -142,12 +142,12 @@ export function SubscriptionPlans({
                 onClick={() => setSelected(plan)}
               >
                 {current
-                  ? "Current plan"
+                  ? tr("Current plan")
                   : canChangePlan
                     ? plan.priceMonthly > (currentPlan?.priceMonthly ?? 0)
-                      ? "Upgrade to " + plan.name
-                      : "Change to " + plan.name
-                    : "Owner or admin required"}
+                      ? tr("Upgrade to ") + plan.name
+                      : tr("Change to ") + plan.name
+                    : tr("Owner or admin required")}
               </Button>
             </Card>
           );
@@ -165,7 +165,7 @@ export function SubscriptionPlans({
             <div className="flex items-start justify-between gap-4">
               <div>
                 <Dialog.Title className="text-lg font-semibold">
-                  Change workspace plan?
+                  {tr("Change workspace plan?")}
                 </Dialog.Title>
                 <Dialog.Description className="mt-1 text-sm text-muted-foreground">
                   Move from {currentPlan?.name ?? "the current plan"} to{" "}
@@ -174,7 +174,7 @@ export function SubscriptionPlans({
                 </Dialog.Description>
               </div>
               <Dialog.Close asChild>
-                <Button variant="ghost" disabled={pending} aria-label="Close">
+                <Button variant="ghost" disabled={pending} aria-label={tr("Close")}>
                   <X className="size-4" />
                 </Button>
               </Dialog.Close>
@@ -185,13 +185,13 @@ export function SubscriptionPlans({
                 <strong>${selected?.priceMonthly ?? 0} / month</strong>
               </div>
               <p className="mt-2 text-xs text-muted-foreground">
-                No charge will be created because billing is not connected yet.
+                {tr("No charge will be created because billing is not connected yet.")}
               </p>
             </div>
             <div className="mt-6 flex justify-end gap-2">
               <Dialog.Close asChild>
                 <Button variant="outline" disabled={pending}>
-                  Cancel
+                  {tr("Cancel")}
                 </Button>
               </Dialog.Close>
               <Button onClick={confirm} disabled={pending}>

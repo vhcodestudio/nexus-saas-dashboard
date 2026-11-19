@@ -1,4 +1,5 @@
 "use client";
+import { T } from "./lang-provider";
 
 import { Area, AreaChart, ResponsiveContainer, Tooltip } from "recharts";
 import { ArrowDownRight, ArrowUpRight, Minus } from "lucide-react";
@@ -32,7 +33,7 @@ export function DashboardKpi({
     <Card onPointerMove={(e) => { const r = e.currentTarget.getBoundingClientRect(); e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`); e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`); }} className="nexus-spot group relative min-w-0 animate-rise overflow-hidden p-5 transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-[0_22px_55px_-34px_var(--primary)]">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/55 to-transparent opacity-50" />
       <div className="flex items-start justify-between gap-3">
-        <p className="text-sm font-medium text-muted-foreground">{label}</p>
+        <p className="text-sm font-medium text-muted-foreground"><T><T>{label}</T></T></p>
         <span
           className={cn(
             "inline-flex items-center rounded-full px-2 py-1 text-xs font-semibold",
@@ -54,7 +55,7 @@ export function DashboardKpi({
       <p className="mt-4 truncate font-mono text-2xl font-semibold tracking-[-0.045em] sm:text-[1.75rem]">
         {value}
       </p>
-      <p className="mt-1 min-h-4 text-xs text-muted-foreground">{detail}</p>
+      <p className="mt-1 min-h-4 text-xs text-muted-foreground"><T>{detail}</T></p>
       <div
         className="mt-4 h-[4.25rem] -mb-1"
         aria-label={`${label} trend over the last six months`}

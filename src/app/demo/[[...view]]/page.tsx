@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { DemoWorkspace } from "@/components/demo-workspace";
+import { getTr } from "@/lib/i18n/server";
 
 const views = [
   "dashboard",
@@ -13,12 +14,14 @@ const views = [
 ] as const;
 export type DemoView = (typeof views)[number];
 
-export const metadata: Metadata = {
-  title: "Interactive product demo",
-  description:
-    "Explore the Nexus SaaS workspace with fictional, read-only data.",
-  robots: { index: true, follow: true },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const tr = await getTr();
+  return {
+    title: tr("Interactive product demo"),
+    description: tr("Explore the Nexus SaaS workspace with fictional, read-only data."),
+    robots: { index: true, follow: true },
+  };
+}
 
 export default async function DemoPage({
   params,

@@ -1,8 +1,10 @@
 import { Card } from "@/components/ui";
+import { getTr } from "@/lib/i18n/server";
 
-export default function CustomersLoading() {
+export default async function CustomersLoading() {
+  const tr = await getTr();
   return (
-    <div aria-label="Loading customers">
+    <div aria-label={tr("Loading customers")}>
       <div className="mb-7 h-20 animate-pulse rounded-2xl bg-muted" />
       <div className="mb-4 grid gap-4 sm:grid-cols-3">
         {[1, 2, 3].map((item) => (

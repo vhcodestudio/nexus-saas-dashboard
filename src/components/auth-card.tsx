@@ -7,6 +7,7 @@ import { GitBranch, LoaderCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { NexusMark } from "./nexus-mark";
 import { getAuthOrigin } from "@/lib/site-url";
+import { useTr } from "@/components/lang-provider";
 export function AuthCard({
   mode,
   next = "/dashboard",
@@ -16,6 +17,7 @@ export function AuthCard({
   next?: string;
   message?: string;
 }) {
+  const tr = useTr();
   const router = useRouter(),
     [loading, setLoading] = useState(false),
     [oauthLoading, setOauthLoading] = useState<"google" | "github" | null>(
@@ -31,7 +33,7 @@ export function AuthCard({
     const password = String(form.get("password"));
     const authOrigin = getAuthOrigin(location.origin);
     if (!authOrigin) {
-      setError("Authentication redirect configuration is invalid.");
+      setError(tr("Authentication redirect configuration is invalid."));
       setLoading(false);
       return;
     }
@@ -45,7 +47,7 @@ export function AuthCard({
       supabase = createClient();
     } catch {
       setError(
-        "Authentication is temporarily unavailable. Please try again later.",
+        tr("Authentication is temporarily unavailable. Please try again later."),
       );
       setLoading(false);
       return;
@@ -83,14 +85,14 @@ export function AuthCard({
       supabase = createClient();
     } catch {
       setError(
-        "Authentication is temporarily unavailable. Please try again later.",
+        tr("Authentication is temporarily unavailable. Please try again later."),
       );
       setOauthLoading(null);
       return;
     }
     const authOrigin = getAuthOrigin(location.origin);
     if (!authOrigin) {
-      setError("Authentication redirect configuration is invalid.");
+      setError(tr("Authentication redirect configuration is invalid."));
       setOauthLoading(null);
       return;
     }
@@ -114,15 +116,15 @@ export function AuthCard({
         <NexusMark className="mx-auto size-10" />
         <h1 className="mt-5 text-2xl font-semibold">
           {mode === "login"
-            ? "Welcome back"
+            ? tr("Welcome back")
             : mode === "register"
-              ? "Create your account"
-              : "Reset your password"}
+              ? tr("Create your account")
+              : tr("Reset your password")}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           {mode === "forgot"
-            ? "We’ll send a secure reset link to your inbox."
-            : "Continue to your Nexus workspace."}
+            ? tr("We’ll send a secure reset link to your inbox.")
+            : tr("Continue to your Nexus workspace.")}
         </p>
       </div>
       {message && (
@@ -164,32 +166,32 @@ export function AuthCard({
           </div>
           <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
             <span className="h-px flex-1 bg-border" />
-            OR CONTINUE WITH EMAIL
+            {tr("OR CONTINUE WITH EMAIL")}
             <span className="h-px flex-1 bg-border" />
           </div>
         </>
       )}
       <form onSubmit={submit} className="space-y-4">
         <label className="block text-sm font-medium">
-          Email address
+          {tr("Email address")}
           <Input
             className="mt-2"
             type="email"
             name="email"
             required
-            placeholder="you@company.com"
+            placeholder={tr("you@company.com")}
           />
         </label>
         {mode !== "forgot" && (
           <label className="block text-sm font-medium">
-            Password
+            {tr("Password")}
             <Input
               className="mt-2"
               type="password"
               name="password"
               required
               minLength={8}
-              placeholder="At least 8 characters"
+              placeholder={tr("At least 8 characters")}
             />
           </label>
         )}
@@ -205,11 +207,11 @@ export function AuthCard({
           {loading ? (
             <LoaderCircle className="size-4 animate-spin" />
           ) : mode === "login" ? (
-            "Sign in"
+            tr("Sign in")
           ) : mode === "register" ? (
-            "Create account"
+            tr("Create account")
           ) : (
-            "Send reset link"
+            tr("Send reset link")
           )}
         </Button>
       </form>
@@ -218,19 +220,19 @@ export function AuthCard({
           <>
             New to Nexus?{" "}
             <Link className="font-medium text-primary" href="/register">
-              Create account
+              {tr("Create account")}
             </Link>
           </>
         ) : mode === "register" ? (
           <>
             Already a member?{" "}
             <Link className="font-medium text-primary" href="/login">
-              Sign in
+              {tr("Sign in")}
             </Link>
           </>
         ) : (
           <Link className="font-medium text-primary" href="/login">
-            Back to sign in
+            {tr("Back to sign in")}
           </Link>
         )}
       </p>
@@ -239,7 +241,7 @@ export function AuthCard({
           href="/forgot-password"
           className="mt-3 block text-center text-xs text-muted-foreground hover:text-primary"
         >
-          Forgot your password?
+          {tr("Forgot your password?")}
         </Link>
       )}
     </Card>

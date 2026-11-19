@@ -1,5 +1,6 @@
 import { ArrowDownRight, ArrowUpRight, Download, Filter } from "lucide-react";
 import { Button, Card } from "./ui";
+import { T } from "./lang-provider";
 export function PageHead({
   title,
   description,
@@ -13,13 +14,13 @@ export function PageHead({
     <div className="mb-8 flex flex-col justify-between gap-4 border-b border-border/60 pb-6 sm:flex-row sm:items-end">
       <div>
         <p className="mb-1 text-xs font-semibold uppercase tracking-[.18em] text-primary">
-          Nexus workspace
+          <T>{"Nexus workspace"}</T>
         </p>
         <h1 className="text-2xl font-semibold tracking-[-0.04em] text-foreground sm:text-[2rem]">
-          {title}
+          <T><T>{title}</T></T>
         </h1>
         <p className="mt-1.5 max-w-2xl text-sm leading-6 text-muted-foreground">
-          {description}
+          <T><T>{description}</T></T>
         </p>
       </div>
       <div className="flex gap-2">
@@ -27,11 +28,11 @@ export function PageHead({
           <>
             <Button variant="outline">
               <Download className="size-4" />
-              Export
+              <T>{"Export"}</T>
             </Button>
             <Button variant="outline">
               <Filter className="size-4" />
-              Filters
+              <T>{"Filters"}</T>
             </Button>
           </>
         )}
@@ -56,7 +57,7 @@ export function Metric({
     <Card className="group relative animate-rise overflow-hidden p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_16px_50px_-28px_var(--primary)]">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
       <div className="flex items-center justify-between">
-        <span className="text-sm text-muted-foreground">{label}</span>
+        <span className="text-sm text-muted-foreground"><T><T>{label}</T></T></span>
         <span
           className={`flex items-center text-xs font-medium ${down ? "text-red-500" : "text-emerald-500"}`}
         >
@@ -72,7 +73,7 @@ export function Metric({
         <div>
           <p className="text-2xl font-semibold tracking-tight">{value}</p>
           <p className="mt-1 text-xs text-muted-foreground">
-            {detail ?? "vs. previous period"}
+            <T>{detail ?? "vs. previous period"}</T>
           </p>
         </div>
         <div className="flex h-8 items-end gap-1" aria-hidden="true">
@@ -104,9 +105,9 @@ export function SectionTitle({
   return (
     <div className="flex items-center justify-between border-b border-border/70 px-5 py-4 sm:px-6">
       <div>
-        <h2 className="font-semibold">{title}</h2>
+        <h2 className="font-semibold"><T><T>{title}</T></T></h2>
         {description && (
-          <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground"><T><T>{description}</T></T></p>
         )}
       </div>
       {aside}

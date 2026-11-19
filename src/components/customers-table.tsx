@@ -18,6 +18,8 @@ import {
 import type { CustomerView } from "@/lib/queries";
 import { Avatar, Badge, Button, Card, Input } from "@/components/ui";
 import { cn } from "@/lib/utils";
+import { useTr } from "@/components/lang-provider";
+import { T } from "@/components/lang-provider";
 
 type SortKey = "name" | "status" | "plan" | "mrr" | "healthScore" | "createdAt";
 type Direction = "asc" | "desc";
@@ -62,7 +64,7 @@ function Health({ score, label }: { score: number; label: string }) {
     <div className="min-w-28">
       <div className="flex items-center justify-between text-xs">
         <span className="font-medium">{score}</span>
-        <span className="text-muted-foreground">{label}</span>
+        <span className="text-muted-foreground"><T>{label}</T></span>
       </div>
       <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-muted">
         <div
@@ -75,6 +77,7 @@ function Health({ score, label }: { score: number; label: string }) {
 }
 
 export function CustomersTable({ customers }: { customers: CustomerView[] }) {
+  const tr = useTr();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
   const [plan, setPlan] = useState("all");
@@ -142,9 +145,9 @@ export function CustomersTable({ customers }: { customers: CustomerView[] }) {
                 setQuery(event.target.value);
                 setPage(1);
               }}
-              placeholder="Search name, email or company..."
+              placeholder={tr("Search name, email or company...")}
               className="pl-9"
-              aria-label="Search customers"
+              aria-label={tr("Search customers")}
             />
           </div>
           <div className="flex flex-wrap gap-2">
@@ -158,9 +161,9 @@ export function CustomersTable({ customers }: { customers: CustomerView[] }) {
                 setStatus(event.target.value);
                 setPage(1);
               }}
-              aria-label="Filter by status"
+              aria-label={tr("Filter by status")}
             >
-              <option value="all">All statuses</option>
+              <option value="all">{tr("All statuses")}</option>
               {statuses.map((value) => (
                 <option key={value}>{value}</option>
               ))}
@@ -172,9 +175,9 @@ export function CustomersTable({ customers }: { customers: CustomerView[] }) {
                 setPlan(event.target.value);
                 setPage(1);
               }}
-              aria-label="Filter by plan"
+              aria-label={tr("Filter by plan")}
             >
-              <option value="all">All plans</option>
+              <option value="all">{tr("All plans")}</option>
               {plans.map((value) => (
                 <option key={value}>{value}</option>
               ))}
@@ -184,14 +187,14 @@ export function CustomersTable({ customers }: { customers: CustomerView[] }) {
         {customers.length === 0 ? (
           <Empty
             icon={UserRoundX}
-            title="No customers yet"
-            description="Customers will appear here after they are created in this workspace."
+            title={tr("No customers yet")}
+            description={tr("Customers will appear here after they are created in this workspace.")}
           />
         ) : visible.length === 0 ? (
           <Empty
             icon={Search}
-            title="No matching customers"
-            description="Try another search or clear the selected filters."
+            title={tr("No matching customers")}
+            description={tr("Try another search or clear the selected filters.")}
             action={
               <Button
                 variant="outline"
@@ -201,7 +204,7 @@ export function CustomersTable({ customers }: { customers: CustomerView[] }) {
                   setPlan("all");
                 }}
               >
-                Clear filters
+                {tr("Clear filters")}
               </Button>
             }
           />
@@ -211,42 +214,42 @@ export function CustomersTable({ customers }: { customers: CustomerView[] }) {
               <thead className="bg-muted/40 text-xs text-muted-foreground">
                 <tr>
                   <Head
-                    label="Customer"
+                    label={tr("Customer")}
                     field="name"
                     active={sort}
                     direction={direction}
                     onSort={changeSort}
                   />
                   <Head
-                    label="Status"
+                    label={tr("Status")}
                     field="status"
                     active={sort}
                     direction={direction}
                     onSort={changeSort}
                   />
                   <Head
-                    label="Plan"
+                    label={tr("Plan")}
                     field="plan"
                     active={sort}
                     direction={direction}
                     onSort={changeSort}
                   />
                   <Head
-                    label="MRR"
+                    label={tr("MRR")}
                     field="mrr"
                     active={sort}
                     direction={direction}
                     onSort={changeSort}
                   />
                   <Head
-                    label="Health"
+                    label={tr("Health")}
                     field="healthScore"
                     active={sort}
                     direction={direction}
                     onSort={changeSort}
                   />
                   <Head
-                    label="Last activity"
+                    label={tr("Last activity")}
                     field="createdAt"
                     active={sort}
                     direction={direction}
@@ -281,10 +284,10 @@ export function CustomersTable({ customers }: { customers: CustomerView[] }) {
                     </td>
                     <td className="p-4">
                       <Badge tone={statusTone(customer.status)}>
-                        {customer.status}
+                        <T>{customer.status}</T>
                       </Badge>
                     </td>
-                    <td className="p-4">{customer.plan}</td>
+                    <td className="p-4"><T>{customer.plan}</T></td>
                     <td className="p-4 font-mono font-medium">
                       ${customer.mrr.toLocaleString()}
                     </td>
@@ -307,7 +310,7 @@ export function CustomersTable({ customers }: { customers: CustomerView[] }) {
           <p className="text-muted-foreground">
             {filtered.length === 0
               ? "0 results"
-              : "Showing " +
+              : tr("Showing ") +
                 ((currentPage - 1) * pageSize + 1) +
                 "–" +
                 Math.min(currentPage * pageSize, filtered.length) +
@@ -319,7 +322,7 @@ export function CustomersTable({ customers }: { customers: CustomerView[] }) {
               variant="outline"
               disabled={currentPage === 1}
               onClick={() => setPage((value) => value - 1)}
-              aria-label="Previous page"
+              aria-label={tr("Previous page")}
             >
               <ChevronLeft className="size-4" />
             </Button>
@@ -330,7 +333,7 @@ export function CustomersTable({ customers }: { customers: CustomerView[] }) {
               variant="outline"
               disabled={currentPage === pages}
               onClick={() => setPage((value) => value + 1)}
-              aria-label="Next page"
+              aria-label={tr("Next page")}
             >
               <ChevronRight className="size-4" />
             </Button>
@@ -363,7 +366,7 @@ function Head({
         className="inline-flex items-center gap-1.5 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         onClick={() => onSort(field)}
       >
-        {label}
+        <T>{label}</T>
         <Icon className="size-3.5" />
       </button>
     </th>
@@ -387,11 +390,11 @@ function Empty({
         <span className="mx-auto grid size-11 place-items-center rounded-xl bg-muted">
           <Icon className="size-5 text-muted-foreground" />
         </span>
-        <h3 className="mt-4 font-semibold">{title}</h3>
+        <h3 className="mt-4 font-semibold"><T>{title}</T></h3>
         <p className="mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
-          {description}
+          <T>{description}</T>
         </p>
-        {action && <div className="mt-4">{action}</div>}
+        {action && <div className="mt-4"><T>{action}</T></div>}
       </div>
     </div>
   );
@@ -404,6 +407,7 @@ function CustomerDrawer({
   customer: CustomerView | null;
   onClose: () => void;
 }) {
+  const tr = useTr();
   const [data, setData] = useState<QuickView | null>(null);
   const [error, setError] = useState(false);
   useEffect(() => {
@@ -413,7 +417,7 @@ function CustomerDrawer({
       signal: controller.signal,
     })
       .then((response) => {
-        if (!response.ok) throw new Error("Request failed");
+        if (!response.ok) throw new Error(tr("Request failed"));
         return response.json();
       })
       .then(setData)
@@ -446,20 +450,20 @@ function CustomerDrawer({
               </div>
             </div>
             <Dialog.Close asChild>
-              <Button variant="ghost" aria-label="Close quick view">
+              <Button variant="ghost" aria-label={tr("Close quick view")}>
                 <X className="size-4" />
               </Button>
             </Dialog.Close>
           </div>
           <div className="mt-7 grid grid-cols-2 gap-4 rounded-xl border border-border p-4 text-sm">
-            <Info label="Status">
+            <Info label={tr("Status")}>
               <Badge tone={statusTone(customer.status)}>
-                {customer.status}
+                <T>{customer.status}</T>
               </Badge>
             </Info>
-            <Info label="Plan">{customer.plan}</Info>
-            <Info label="MRR">${customer.mrr.toLocaleString()}</Info>
-            <Info label="Health">
+            <Info label={tr("Plan")}><T>{customer.plan}</T></Info>
+            <Info label={tr("MRR")}>${customer.mrr.toLocaleString()}</Info>
+            <Info label={tr("Health")}>
               <Health
                 score={customer.healthScore}
                 label={customer.healthLabel}
@@ -469,10 +473,10 @@ function CustomerDrawer({
           {error ? (
             <div className="mt-5 rounded-xl border border-red-500/20 bg-red-500/5 p-4 text-sm">
               <p className="font-medium text-red-600 dark:text-red-400">
-                Could not load customer details
+                {tr("Could not load customer details")}
               </p>
               <p className="mt-1 text-muted-foreground">
-                Close this panel and try again.
+                {tr("Close this panel and try again.")}
               </p>
             </div>
           ) : !data ? (
@@ -480,36 +484,36 @@ function CustomerDrawer({
           ) : (
             <div className="mt-6 space-y-6">
               <section>
-                <h3 className="text-sm font-semibold">Account overview</h3>
+                <h3 className="text-sm font-semibold">{tr("Account overview")}</h3>
                 <dl className="mt-3 grid grid-cols-2 gap-4 text-sm">
-                  <Info label="Last payment">
+                  <Info label={tr("Last payment")}>
                     {data.lastPayment
                       ? "$" +
                         data.lastPayment.value.toLocaleString() +
                         " · " +
                         data.lastPayment.date
-                      : "No payments"}
+                      : tr("No payments")}
                   </Info>
-                  <Info label="Subscription">
+                  <Info label={tr("Subscription")}>
                     {data.subscription
                       ? data.subscription.status +
                         " · " +
                         data.subscription.currentPeriodEnd
-                      : "No subscription"}
+                      : tr("No subscription")}
                   </Info>
-                  <Info label="Joined">{customer.joined}</Info>
-                  <Info label="Last seen">{customer.activity}</Info>
+                  <Info label={tr("Joined")}>{customer.joined}</Info>
+                  <Info label={tr("Last seen")}>{customer.activity}</Info>
                 </dl>
               </section>
               <section>
-                <h3 className="text-sm font-semibold">Recent activity</h3>
+                <h3 className="text-sm font-semibold">{tr("Recent activity")}</h3>
                 {data.activities.length ? (
                   <div className="mt-3 space-y-3">
                     {data.activities.map((activity) => (
                       <div key={activity.id} className="flex gap-3 text-sm">
                         <span className="mt-1.5 size-2 shrink-0 rounded-full bg-primary" />
                         <div>
-                          <p>{activity.kind}</p>
+                          <p><T>{activity.kind}</T></p>
                           <p className="text-xs text-muted-foreground">
                             {activity.date}
                           </p>
@@ -519,7 +523,7 @@ function CustomerDrawer({
                   </div>
                 ) : (
                   <p className="mt-2 rounded-lg bg-muted/50 p-3 text-sm text-muted-foreground">
-                    No activity recorded yet.
+                    {tr("No activity recorded yet.")}
                   </p>
                 )}
               </section>
@@ -529,7 +533,7 @@ function CustomerDrawer({
             href={"/customers/" + customer.id}
             className="mt-7 inline-flex h-10 w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
           >
-            Open full profile
+            {tr("Open full profile")}
             <ExternalLink className="size-4" />
           </Link>
         </Dialog.Content>
@@ -547,14 +551,15 @@ function Info({
 }) {
   return (
     <div>
-      <dt className="text-xs text-muted-foreground">{label}</dt>
+      <dt className="text-xs text-muted-foreground"><T>{label}</T></dt>
       <dd className="mt-1 font-medium">{children}</dd>
     </div>
   );
 }
 function DrawerSkeleton() {
+  const tr = useTr();
   return (
-    <div className="mt-6 space-y-4" aria-label="Loading customer details">
+    <div className="mt-6 space-y-4" aria-label={tr("Loading customer details")}>
       <div className="h-4 w-32 animate-pulse rounded bg-muted" />
       <div className="grid grid-cols-2 gap-4">
         {[1, 2, 3, 4].map((item) => (

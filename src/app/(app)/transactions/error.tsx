@@ -1,12 +1,14 @@
 "use client";
 import { AlertTriangle, RotateCcw } from "lucide-react";
 import { Button, Card } from "@/components/ui";
+import { useTr } from "@/components/lang-provider";
 export default function TransactionsError({
   reset,
 }: {
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const tr = useTr();
   return (
     <Card className="grid min-h-96 place-items-center p-8 text-center">
       <div>
@@ -14,14 +16,14 @@ export default function TransactionsError({
           <AlertTriangle className="size-5 text-red-500" />
         </span>
         <h1 className="mt-4 text-lg font-semibold">
-          Transactions could not be loaded
+          {tr("Transactions could not be loaded")}
         </h1>
         <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
-          The workspace payment data is temporarily unavailable.
+          {tr("The workspace payment data is temporarily unavailable.")}
         </p>
         <Button className="mt-5" onClick={reset}>
           <RotateCcw className="size-4" />
-          Try again
+          {tr("Try again")}
         </Button>
       </div>
     </Card>

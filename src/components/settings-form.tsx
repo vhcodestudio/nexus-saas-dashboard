@@ -36,6 +36,8 @@ import {
   updateProfile,
   updateWorkspaceSettings,
 } from "@/app/(app)/settings/actions";
+import { useTr } from "@/components/lang-provider";
+import { T } from "@/components/lang-provider";
 
 type Role = "owner" | "admin" | "manager" | "member" | "viewer";
 export type SettingsData = {
@@ -124,6 +126,7 @@ const formatSecurityDate = (value: string) =>
   }).format(new Date(value));
 
 export function SettingsForm({ data }: { data: SettingsData }) {
+  const tr = useTr();
   const [section, setSection] = useState("general"),
     [pending, startTransition] = useTransition();
   const router = useRouter();
@@ -136,14 +139,14 @@ export function SettingsForm({ data }: { data: SettingsData }) {
         toast.success(message);
         router.refresh();
       } catch (e) {
-        toast.error(e instanceof Error ? e.message : "Something went wrong.");
+        toast.error(e instanceof Error ? tr(e.message) : tr("Something went wrong."));
       }
     });
   return (
     <div className="grid gap-6 xl:grid-cols-[220px_minmax(0,1fr)] xl:gap-8">
       <nav
         className="nexus-surface flex gap-1 overflow-x-auto rounded-2xl border border-border/80 bg-card p-2 xl:sticky xl:top-24 xl:h-fit xl:flex-col"
-        aria-label="Settings sections"
+        aria-label={tr("Settings sections")}
       >
         {sections.map(([id, label, Icon]) => (
           <button
@@ -153,7 +156,7 @@ export function SettingsForm({ data }: { data: SettingsData }) {
             className={`flex shrink-0 items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all ${section === id ? "bg-primary/10 font-semibold text-primary shadow-[inset_3px_0_0_var(--primary)]" : "text-muted-foreground hover:bg-muted hover:text-foreground"}`}
           >
             <Icon className="size-4" />
-            {label}
+            <T>{label}</T>
           </button>
         ))}
       </nav>
@@ -195,8 +198,8 @@ export function SettingsForm({ data }: { data: SettingsData }) {
         {section === "billing" && <BillingPanel data={data} />}
         {section === "api" && (
           <ComingSoon
-            title="API keys"
-            text="A secure server-side key vault and scoped key issuance backend are not configured. No keys are generated or stored in this browser."
+            title={tr("API keys")}
+            text={tr("A secure server-side key vault and scoped key issuance backend are not configured. No keys are generated or stored in this browser.")}
             icon={KeyRound}
           />
         )}
@@ -223,8 +226,8 @@ function Panel({
   return (
     <Card className="overflow-hidden">
       <header className="border-b border-border/70 bg-muted/15 px-5 py-5 sm:px-7">
-        <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
-        <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+        <h2 className="text-lg font-semibold tracking-tight"><T>{title}</T></h2>
+        <p className="mt-1 text-sm text-muted-foreground"><T>{description}</T></p>
       </header>
       <div className="p-5 sm:p-7 lg:p-8">{children}</div>
     </Card>
@@ -241,11 +244,11 @@ function Field({
 }) {
   return (
     <label className="block text-sm font-medium">
-      {label}
+      <T>{label}</T>
       <span className="mt-2 block">{children}</span>
       {hint && (
         <span className="mt-1 block text-xs font-normal text-muted-foreground">
-          {hint}
+          <T>{hint}</T>
         </span>
       )}
     </label>
@@ -265,6 +268,7 @@ function WorkspacePanel({
   run: Run;
   general?: boolean;
 }) {
+  const tr = useTr();
   const [name, setName] = useState(data.workspace.name),
     [slug, setSlug] = useState(data.workspace.slug),
     [timezone, setTimezone] = useState(data.workspace.timezone ?? "UTC"),
@@ -282,19 +286,19 @@ function WorkspacePanel({
           currency: currency as "USD" | "BRL" | "EUR",
           logoUrl,
         }),
-      "Workspace settings saved.",
+      tr("Workspace settings saved."),
     );
   return (
     <Panel
-      title={general ? "General settings" : "Workspace identity"}
+      title={general ? tr("General settings") : tr("Workspace identity")}
       description={
         canManage
-          ? "Changes apply only to the active workspace."
-          : "Your role has read-only access."
+          ? tr("Changes apply only to the active workspace.")
+          : tr("Your role has read-only access.")
       }
     >
       <div className="grid gap-5 md:grid-cols-2">
-        <Field label="Workspace name">
+        <Field label={tr("Workspace name")}>
           <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -302,7 +306,7 @@ function WorkspacePanel({
           />
         </Field>
         {!general && (
-          <Field label="Slug">
+          <Field label={tr("Slug")}>
             <Input
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
@@ -311,7 +315,7 @@ function WorkspacePanel({
           </Field>
         )}
         {!general && (
-          <Field label="Logo URL" hint="HTTPS image URL">
+          <Field label={tr("Logo URL")} hint={tr("HTTPS image URL")}>
             <Input
               value={logoUrl}
               onChange={(e) => setLogo(e.target.value)}
@@ -319,7 +323,7 @@ function WorkspacePanel({
             />
           </Field>
         )}
-        <Field label="Timezone">
+        <Field label={tr("Timezone")}>
           <select
             className={selectClass}
             value={timezone}
@@ -331,7 +335,7 @@ function WorkspacePanel({
             ))}
           </select>
         </Field>
-        <Field label="Locale">
+        <Field label={tr("Locale")}>
           <select
             className={selectClass}
             value={locale}
@@ -340,19 +344,19 @@ function WorkspacePanel({
           >
             <option value="en-US">English (US)</option>
             <option value="pt-BR">Português (Brasil)</option>
-            <option value="es-ES">Español</option>
+            <option value="es-ES">{tr("Español")}</option>
           </select>
         </Field>
-        <Field label="Currency">
+        <Field label={tr("Currency")}>
           <select
             className={selectClass}
             value={currency}
             onChange={(e) => setCurrency(e.target.value)}
             disabled={!canManage}
           >
-            <option>USD</option>
-            <option>BRL</option>
-            <option>EUR</option>
+            <option>{tr("USD")}</option>
+            <option>{tr("BRL")}</option>
+            <option>{tr("EUR")}</option>
           </select>
         </Field>
       </div>
@@ -360,7 +364,7 @@ function WorkspacePanel({
         <Footer>
           <Button onClick={save} disabled={pending}>
             <Save className="size-4" />
-            Save changes
+            {tr("Save changes")}
           </Button>
         </Footer>
       )}
@@ -376,6 +380,7 @@ function ProfilePanel({
   pending: boolean;
   run: Run;
 }) {
+  const tr = useTr();
   const [name, setName] = useState(
       data.profile.full_name || data.identity.name,
     ),
@@ -384,28 +389,28 @@ function ProfilePanel({
     [password, setPassword] = useState("");
   return (
     <Panel
-      title="Your profile"
-      description="Personal information follows you across Nexus workspaces."
+      title={tr("Your profile")}
+      description={tr("Personal information follows you across Nexus workspaces.")}
     >
       <div className="flex items-center gap-4 border-b pb-6">
         <Avatar initials={displayInitials(name)} avatarUrl={avatar} />
         <div>
           <p className="font-medium">{name}</p>
-          <p className="text-sm text-muted-foreground">Profile preview</p>
+          <p className="text-sm text-muted-foreground">{tr("Profile preview")}</p>
         </div>
       </div>
       <div className="mt-6 grid gap-5 md:grid-cols-2">
-        <Field label="Full name">
+        <Field label={tr("Full name")}>
           <Input value={name} onChange={(e) => setName(e.target.value)} />
         </Field>
-        <Field label="Avatar URL">
+        <Field label={tr("Avatar URL")}>
           <Input
             value={avatar}
             onChange={(e) => setAvatar(e.target.value)}
-            placeholder="https://…"
+            placeholder={tr("https://…")}
           />
         </Field>
-        <Field label="Email" hint="May require email confirmation">
+        <Field label={tr("Email")} hint={tr("May require email confirmation")}>
           <Input
             type="email"
             value={email}
@@ -418,10 +423,10 @@ function ProfilePanel({
             disabled={pending || email === data.identity.email}
             onClick={() => run(() => updateEmail(email), "Confirmation sent.")}
           >
-            Update email
+            {tr("Update email")}
           </Button>
         </div>
-        <Field label="New password" hint="At least 10 characters">
+        <Field label={tr("New password")} hint={tr("At least 10 characters")}>
           <Input
             type="password"
             value={password}
@@ -436,7 +441,7 @@ function ProfilePanel({
               run(() => updatePassword(password), "Password updated.")
             }
           >
-            Update password
+            {tr("Update password")}
           </Button>
         </div>
       </div>
@@ -446,12 +451,12 @@ function ProfilePanel({
           onClick={() =>
             run(
               () => updateProfile({ fullName: name, avatarUrl: avatar }),
-              "Profile updated.",
+              tr("Profile updated."),
             )
           }
         >
           <Save className="size-4" />
-          Save profile
+          {tr("Save profile")}
         </Button>
       </Footer>
     </Panel>
@@ -468,6 +473,7 @@ function MembersPanel({
   pending: boolean;
   run: Run;
 }) {
+  const tr = useTr();
   const [email, setEmail] = useState(""),
     [role, setRole] = useState("member"),
     [removeTarget, setRemoveTarget] = useState<
@@ -479,14 +485,14 @@ function MembersPanel({
       : ["manager", "member", "viewer"];
   return (
     <Panel
-      title="Members"
+      title={tr("Members")}
       description={`${data.members.length} active member${data.members.length === 1 ? "" : "s"} in this workspace.`}
     >
       {canManage && (
         <div className="mb-6 grid gap-3 rounded-xl border bg-muted/30 p-4 sm:grid-cols-[1fr_150px_auto]">
           <Input
             type="email"
-            placeholder="teammate@company.com"
+            placeholder={tr("teammate@company.com")}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -504,15 +510,14 @@ function MembersPanel({
             onClick={() =>
               run(
                 () => inviteMember({ email, role }),
-                "Pending invitation created.",
+                tr("Pending invitation created."),
               )
             }
           >
-            Invite member
+            {tr("Invite member")}
           </Button>
           <p className="text-xs text-muted-foreground sm:col-span-3">
-            Email delivery is not configured; Nexus records the pending
-            invitation without pretending a message was sent.
+            {tr("Email delivery is not configured; Nexus records the pending invitation without pretending a message was sent.")}
           </p>
         </div>
       )}
@@ -525,14 +530,14 @@ function MembersPanel({
                 {m.name}
                 {m.id === data.identity.id && (
                   <span className="ml-2 text-xs text-muted-foreground">
-                    You
+                    {tr("You")}
                   </span>
                 )}
               </p>
               <p className="text-xs text-muted-foreground">Joined {m.joined}</p>
             </div>
             {m.role === "owner" ? (
-              <Badge tone="blue">Owner</Badge>
+              <Badge tone="blue">{tr("Owner")}</Badge>
             ) : (
               <select
                 aria-label={`Role for ${m.name}`}
@@ -546,7 +551,7 @@ function MembersPanel({
                 onChange={(e) =>
                   run(
                     () => updateMemberRole(m.id, e.target.value),
-                    "Role updated.",
+                    tr("Role updated."),
                   )
                 }
               >
@@ -572,14 +577,14 @@ function MembersPanel({
       </div>
       {data.invitations.length > 0 && (
         <div className="mt-6 space-y-2">
-          <h3 className="text-sm font-semibold">Pending invitations</h3>
+          <h3 className="text-sm font-semibold">{tr("Pending invitations")}</h3>
           {data.invitations.map((i) => (
             <div
               key={i.id}
               className="flex justify-between rounded-lg border p-3 text-sm"
             >
               <span>{i.email}</span>
-              <Badge>{i.role}</Badge>
+              <Badge><T>{i.role}</T></Badge>
             </div>
           ))}
         </div>
@@ -594,17 +599,15 @@ function MembersPanel({
           <AlertDialog.Overlay className="fixed inset-0 z-50 bg-black/45 backdrop-blur-[2px]" />
           <AlertDialog.Content className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-background p-6 shadow-2xl outline-none">
             <AlertDialog.Title className="text-lg font-semibold">
-              Remove workspace member?
+              {tr("Remove workspace member?")}
             </AlertDialog.Title>
             <AlertDialog.Description className="mt-2 text-sm text-muted-foreground">
-              {removeTarget?.name} will immediately lose access to this
-              workspace. Their account and access to other workspaces will not
-              be affected.
+              {tr("{name} will immediately lose access to this workspace. Their account and access to other workspaces will not be affected.", { name: removeTarget?.name ?? "" })}
             </AlertDialog.Description>
             <div className="mt-6 flex justify-end gap-2">
               <AlertDialog.Cancel asChild>
                 <Button variant="outline" disabled={pending}>
-                  Cancel
+                  {tr("Cancel")}
                 </Button>
               </AlertDialog.Cancel>
               <AlertDialog.Action asChild>
@@ -618,7 +621,7 @@ function MembersPanel({
                     run(() => removeMember(memberId), "Member removed.");
                   }}
                 >
-                  Remove member
+                  {tr("Remove member")}
                 </Button>
               </AlertDialog.Action>
             </div>
@@ -637,21 +640,22 @@ function NotificationsPanel({
   pending: boolean;
   run: Run;
 }) {
+  const tr = useTr();
   const [v, setV] = useState(data.preferences);
   const labels = {
     payment_failed: ["Payment failed", "A payment needs attention"],
     new_customer: ["New customer", "A customer joins"],
     subscription_canceled: [
       "Subscription canceled",
-      "A subscription is canceled",
+      tr("A subscription is canceled"),
     ],
     weekly_report: ["Weekly report", "Workspace performance summary"],
     security_alert: ["Security alert", "Important access events"],
   } as const;
   return (
     <Panel
-      title="Notifications"
-      description="Choose which workspace events should notify you."
+      title={tr("Notifications")}
+      description={tr("Choose which workspace events should notify you.")}
     >
       <div className="divide-y">
         {Object.entries(labels).map(([k, c]) => (
@@ -680,7 +684,7 @@ function NotificationsPanel({
           }
         >
           <Save className="size-4" />
-          Save preferences
+          {tr("Save preferences")}
         </Button>
       </Footer>
     </Panel>
@@ -695,6 +699,7 @@ function SecurityPanel({
   pending: boolean;
   run: Run;
 }) {
+  const tr = useTr();
   const [factor, setFactor] = useState(""),
     [secret, setSecret] = useState(""),
     [code, setCode] = useState("");
@@ -702,7 +707,7 @@ function SecurityPanel({
     const { createClient } = await import("@/lib/supabase/client");
     const { data: d, error } = await createClient().auth.mfa.enroll({
       factorType: "totp",
-      friendlyName: "Nexus",
+      friendlyName: tr("Nexus"),
     });
     if (error) throw error;
     setFactor(d.id);
@@ -725,12 +730,12 @@ function SecurityPanel({
   };
   return (
     <Panel
-      title="Security"
-      description="Manage sessions and multi-factor authentication."
+      title={tr("Security")}
+      description={tr("Manage sessions and multi-factor authentication.")}
     >
       <div className="space-y-4">
         <Row
-          title="Current session"
+          title={tr("Current session")}
           text={
             "Signed in with " +
             data.identity.provider.replace(/^./, (letter) =>
@@ -742,55 +747,55 @@ function SecurityPanel({
               : "")
           }
         >
-          <Badge tone="green">Verified</Badge>
+          <Badge tone="green">{tr("Verified")}</Badge>
         </Row>
         <Row
-          title="Account created"
+          title={tr("Account created")}
           text={formatSecurityDate(data.identity.createdAt)}
         >
-          <Badge>{data.identity.email ?? "No email"}</Badge>
+          <Badge>{data.identity.email ?? tr("No email")}</Badge>
         </Row>
         <Row
-          title="Password"
-          text="Update your password from the Profile section."
+          title={tr("Password")}
+          text={tr("Update your password from the Profile section.")}
         >
-          <Badge>Profile</Badge>
+          <Badge>{tr("Profile")}</Badge>
         </Row>
-        <Row title="Other sessions" text="Sign out every other active session.">
+        <Row title={tr("Other sessions")} text={tr("Sign out every other active session.")}>
           <Button
             variant="outline"
             disabled={pending}
             onClick={() => run(others, "Other sessions signed out.")}
           >
-            Sign out others
+            {tr("Sign out others")}
           </Button>
         </Row>
         <Row
-          title="Authenticator app"
+          title={tr("Authenticator app")}
           text={
             data.mfaEnabled
-              ? "A verified TOTP factor protects your account."
-              : "Add a TOTP authenticator as a second factor."
+              ? tr("A verified TOTP factor protects your account.")
+              : tr("Add a TOTP authenticator as a second factor.")
           }
         >
           {data.mfaEnabled ? (
             <Badge tone="green">
               <Check className="mr-1 size-3" />
-              Enabled
+              {tr("Enabled")}
             </Badge>
           ) : (
             <Button
               variant="outline"
               onClick={() => run(enroll, "Enrollment started.")}
             >
-              Set up MFA
+              {tr("Set up MFA")}
             </Button>
           )}
         </Row>
         {factor && (
           <div className="rounded-xl border border-primary/30 bg-primary/5 p-4">
             <p className="text-sm font-medium">
-              Add this secret to your authenticator
+              {tr("Add this secret to your authenticator")}
             </p>
             <code className="mt-2 block break-all rounded bg-background p-2 text-xs">
               {secret}
@@ -800,10 +805,10 @@ function SecurityPanel({
                 inputMode="numeric"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
-                placeholder="6-digit code"
+                placeholder={tr("6-digit code")}
               />
               <Button onClick={() => run(verify, "MFA enabled.")}>
-                Verify
+                {tr("Verify")}
               </Button>
             </div>
           </div>
@@ -813,44 +818,45 @@ function SecurityPanel({
   );
 }
 function BillingPanel({ data }: { data: SettingsData }) {
+  const tr = useTr();
   return (
     <Panel
-      title="Billing"
-      description="Plan and usage for the active workspace."
+      title={tr("Billing")}
+      description={tr("Plan and usage for the active workspace.")}
     >
       <div className="grid gap-4 sm:grid-cols-3">
         <Metric
-          label="Current plan"
+          label={tr("Current plan")}
           value={data.workspace.plan.name}
           help={`$${Number(data.workspace.plan.price_monthly).toFixed(0)} / month`}
         />
         <Metric
-          label="Team usage"
+          label={tr("Team usage")}
           value={String(data.members.length)}
           help="active seats"
         />
         <Metric
-          label="Customer usage"
+          label={tr("Customer usage")}
           value={String(data.billing.customerCount)}
           help={`$${data.billing.monthlyRevenue.toLocaleString()} active MRR`}
         />
       </div>
       <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-muted/40 p-4">
         <p className="text-sm text-muted-foreground">
-          No billing provider is connected, so invoices and real charges are
-          unavailable. Workspace tier changes remain available internally.
+          {tr("No billing provider is connected, so invoices and real charges are unavailable. Workspace tier changes remain available internally.")}
         </p>
         <Link
           href="/subscriptions"
           className="inline-flex h-9 items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          Manage plan
+          {tr("Manage plan")}
         </Link>
       </div>
     </Panel>
   );
 }
 function Integrations() {
+  const tr = useTr();
   const items = [
     ["GitHub", "Not connected"],
     ["Slack", "Not connected"],
@@ -861,8 +867,8 @@ function Integrations() {
   ];
   return (
     <Panel
-      title="Integrations"
-      description="Connect Nexus to your existing tools."
+      title={tr("Integrations")}
+      description={tr("Connect Nexus to your existing tools.")}
     >
       <div className="grid gap-3 md:grid-cols-2">
         {items.map(([name, status]) => (
@@ -875,19 +881,18 @@ function Integrations() {
             </span>
             <div className="flex-1">
               <p className="font-medium">{name}</p>
-              <Badge>{status}</Badge>
+              <Badge><T>{status}</T></Badge>
             </div>
             {status === "Not connected" && (
               <Button variant="outline" disabled>
-                Connect
+                {tr("Connect")}
               </Button>
             )}
           </div>
         ))}
       </div>
       <p className="mt-4 text-xs text-muted-foreground">
-        OAuth credentials are not configured; disabled controls do not simulate
-        a connection.
+        {tr("OAuth credentials are not configured; disabled controls do not simulate a connection.")}
       </p>
     </Panel>
   );
@@ -901,36 +906,37 @@ function Appearance({
   pending: boolean;
   run: Run;
 }) {
+  const tr = useTr();
   const { theme, setTheme } = useTheme();
   const [locale, setLocale] = useState(data.profile.locale),
     [timezone, setTimezone] = useState(data.profile.timezone),
     [compact, setCompact] = useState(data.profile.compact_mode);
   return (
-    <Panel title="Appearance" description="Personal interface preferences.">
+    <Panel title={tr("Appearance")} description={tr("Personal interface preferences.")}>
       <div className="grid gap-5 md:grid-cols-2">
-        <Field label="Theme">
+        <Field label={tr("Theme")}>
           <select
             className={selectClass}
             value={theme ?? "system"}
             onChange={(e) => setTheme(e.target.value)}
           >
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-            <option value="system">System</option>
+            <option value="light">{tr("Light")}</option>
+            <option value="dark">{tr("Dark")}</option>
+            <option value="system">{tr("System")}</option>
           </select>
         </Field>
-        <Field label="Language">
+        <Field label={tr("Language")}>
           <select
             className={selectClass}
             value={locale}
             onChange={(e) => setLocale(e.target.value)}
           >
-            <option value="en-US">English</option>
-            <option value="pt-BR">Português</option>
-            <option value="es-ES">Español</option>
+            <option value="en-US">{tr("English")}</option>
+            <option value="pt-BR">{tr("Português")}</option>
+            <option value="es-ES">{tr("Español")}</option>
           </select>
         </Field>
-        <Field label="Timezone">
+        <Field label={tr("Timezone")}>
           <select
             className={selectClass}
             value={timezone}
@@ -943,9 +949,9 @@ function Appearance({
         </Field>
         <label className="flex items-center justify-between rounded-xl border p-4 text-sm">
           <span>
-            <b className="block">Compact mode</b>
+            <b className="block">{tr("Compact mode")}</b>
             <span className="text-xs text-muted-foreground">
-              Reduce spacing in dense views
+              {tr("Reduce spacing in dense views")}
             </span>
           </span>
           <input
@@ -963,12 +969,12 @@ function Appearance({
             run(
               () =>
                 updateAppearance({ locale, timezone, compactMode: compact }),
-              "Appearance saved.",
+              tr("Appearance saved."),
             )
           }
         >
           <Save className="size-4" />
-          Save preferences
+          {tr("Save preferences")}
         </Button>
       </Footer>
     </Panel>
@@ -985,6 +991,7 @@ function Danger({
   pending: boolean;
   run: Run;
 }) {
+  const tr = useTr();
   const [confirm, setConfirm] = useState(""),
     [owner, setOwner] = useState(""),
     [transferOpen, setTransferOpen] = useState(false);
@@ -992,25 +999,25 @@ function Danger({
   const targetOwner = candidates.find((member) => member.id === owner);
   return (
     <Panel
-      title="Danger zone"
-      description="Sensitive operations require explicit confirmation."
+      title={tr("Danger zone")}
+      description={tr("Sensitive operations require explicit confirmation.")}
     >
       <div className="space-y-4">
         <Row
-          title="Export workspace data"
-          text="Download workspace records as JSON."
+          title={tr("Export workspace data")}
+          text={tr("Download workspace records as JSON.")}
         >
           <a
             href="/api/workspace/export"
             className="inline-flex h-9 items-center justify-center gap-2 rounded-lg border border-border bg-background px-3 text-sm font-medium transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             <Download className="size-4" />
-            Export data
+            {tr("Export data")}
           </a>
         </Row>
         <Row
-          title="Transfer ownership"
-          text="The selected member becomes owner; you become admin."
+          title={tr("Transfer ownership")}
+          text={tr("The selected member becomes owner; you become admin.")}
         >
           <div className="flex gap-2">
             <select
@@ -1019,7 +1026,7 @@ function Danger({
               onChange={(e) => setOwner(e.target.value)}
               disabled={!isOwner}
             >
-              <option value="">Select member</option>
+              <option value="">{tr("Select member")}</option>
               {candidates.map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name}
@@ -1031,15 +1038,14 @@ function Danger({
               disabled={!isOwner || !owner || pending}
               onClick={() => setTransferOpen(true)}
             >
-              Transfer
+              {tr("Transfer")}
             </Button>
           </div>
         </Row>
         <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-5">
-          <h3 className="font-semibold text-destructive">Delete workspace</h3>
+          <h3 className="font-semibold text-destructive">{tr("Delete workspace")}</h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            Type <b>{data.workspace.name}</b> to permanently delete all
-            workspace data.
+            {tr("Type")} <b>{data.workspace.name}</b> {tr("to permanently delete all workspace data.")}
           </p>
           <div className="mt-4 flex flex-col gap-2 sm:flex-row">
             <Input
@@ -1055,7 +1061,7 @@ function Danger({
               }
             >
               <Trash2 className="size-4" />
-              Delete forever
+              {tr("Delete forever")}
             </Button>
           </div>
         </div>
@@ -1065,17 +1071,15 @@ function Danger({
           <AlertDialog.Overlay className="fixed inset-0 z-50 bg-black/45 backdrop-blur-[2px]" />
           <AlertDialog.Content className="fixed left-1/2 top-1/2 z-50 w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border bg-background p-6 shadow-2xl outline-none">
             <AlertDialog.Title className="text-lg font-semibold">
-              Transfer workspace ownership?
+              {tr("Transfer workspace ownership?")}
             </AlertDialog.Title>
             <AlertDialog.Description className="mt-2 text-sm text-muted-foreground">
-              {targetOwner?.name ?? "The selected member"} will become the owner
-              of {data.workspace.name}. Your role will change to admin, and only
-              the new owner can reverse this operation.
+              {tr("{name} will become the owner of {workspace}. Your role will change to admin, and only the new owner can reverse this operation.", { name: targetOwner?.name ?? tr("The selected member"), workspace: data.workspace.name })}
             </AlertDialog.Description>
             <div className="mt-6 flex justify-end gap-2">
               <AlertDialog.Cancel asChild>
                 <Button variant="outline" disabled={pending}>
-                  Cancel
+                  {tr("Cancel")}
                 </Button>
               </AlertDialog.Cancel>
               <AlertDialog.Action asChild>
@@ -1086,11 +1090,11 @@ function Danger({
                     setTransferOpen(false);
                     run(
                       () => transferOwnership(owner),
-                      "Ownership transferred.",
+                      tr("Ownership transferred."),
                     );
                   }}
                 >
-                  Confirm transfer
+                  {tr("Confirm transfer")}
                 </Button>
               </AlertDialog.Action>
             </div>
@@ -1112,8 +1116,8 @@ function Row({
   return (
     <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border p-5">
       <div>
-        <p className="font-medium">{title}</p>
-        <p className="mt-1 text-sm text-muted-foreground">{text}</p>
+        <p className="font-medium"><T>{title}</T></p>
+        <p className="mt-1 text-sm text-muted-foreground"><T>{text}</T></p>
       </div>
       {children}
     </div>
@@ -1130,7 +1134,7 @@ function Metric({
 }) {
   return (
     <div className="rounded-xl border p-5">
-      <p className="text-sm text-muted-foreground">{label}</p>
+      <p className="text-sm text-muted-foreground"><T>{label}</T></p>
       <p className="mt-2 text-2xl font-semibold">{value}</p>
       <p className="text-sm text-muted-foreground">{help}</p>
     </div>
@@ -1148,18 +1152,19 @@ function ComingSoon({
   text: string;
   icon: typeof KeyRound;
 }) {
+  const tr = useTr();
   return (
     <Panel
       title={title}
-      description="Secure infrastructure before surface area."
+      description={tr("Secure infrastructure before surface area.")}
     >
       <div className="grid min-h-64 place-items-center rounded-xl border border-dashed p-8 text-center">
         <div>
           <span className="mx-auto grid size-12 place-items-center rounded-xl bg-primary/10 text-primary">
             <Icon />
           </span>
-          <h3 className="mt-4 font-semibold">Coming soon</h3>
-          <p className="mt-2 max-w-lg text-sm text-muted-foreground">{text}</p>
+          <h3 className="mt-4 font-semibold">{tr("Coming soon")}</h3>
+          <p className="mt-2 max-w-lg text-sm text-muted-foreground"><T>{text}</T></p>
         </div>
       </div>
     </Panel>

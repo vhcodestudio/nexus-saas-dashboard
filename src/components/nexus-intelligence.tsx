@@ -17,6 +17,8 @@ import {
 import { Badge, Button, Card } from "./ui";
 import type { InsightKind, NexusInsight } from "@/lib/intelligence";
 import { cn } from "@/lib/utils";
+import { useTr } from "@/components/lang-provider";
+import { T } from "@/components/lang-provider";
 
 const icons: Record<InsightKind, typeof Target> = {
   "churn-risk": ShieldAlert,
@@ -33,6 +35,7 @@ export function NexusIntelligence({
   insights: NexusInsight[];
   mode: "demo" | "live";
 }) {
+  const tr = useTr();
   const [selected, setSelected] = useState(0);
   const [investigating, setInvestigating] = useState(false);
   const insight = insights[selected];
@@ -51,21 +54,21 @@ export function NexusIntelligence({
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-base font-semibold tracking-[-.02em]">
-                  Nexus Intelligence
+                  {tr("Nexus Intelligence")}
                 </h2>
                 <Badge tone={mode === "live" ? "green" : "blue"}>
-                  {mode === "live" ? "Live" : "Demo insights"}
+                  {mode === "live" ? tr("Live") : tr("Demo insights")}
                 </Badge>
               </div>
               <p className="text-xs text-muted-foreground">
-                Signals, possible causes and recommended next steps
+                {tr("Signals, possible causes and recommended next steps")}
               </p>
             </div>
           </div>
           <div
             className="flex max-w-full gap-1 overflow-x-auto"
             role="tablist"
-            aria-label="Intelligence insights"
+            aria-label={tr("Intelligence insights")}
           >
             {insights.map((item, index) => {
               const TabIcon = icons[item.kind];
@@ -100,14 +103,14 @@ export function NexusIntelligence({
             {insight.eyebrow}
           </p>
           <h3 className="mt-2 max-w-2xl text-xl font-semibold tracking-[-.035em] sm:text-[1.65rem] sm:leading-tight">
-            {insight.title}
+            <T>{insight.title}</T>
           </h3>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
             {insight.summary}
           </p>
           <div className="mt-5 rounded-xl border border-primary/10 bg-background/65 p-4 shadow-sm">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Possible cause
+              {tr("Possible cause")}
             </p>
             <p className="mt-2 text-sm leading-6">{insight.possibleCause}</p>
           </div>
@@ -119,14 +122,14 @@ export function NexusIntelligence({
                   className="flex gap-2 rounded-lg bg-muted/60 p-3 text-xs leading-5"
                 >
                   <CheckCircle2 className="mt-0.5 size-3.5 shrink-0 text-emerald-500" />
-                  {item}
+                  <T>{item}</T>
                 </div>
               ))}
             </div>
           )}
           <div className="mt-5 flex flex-wrap gap-2">
             <Button onClick={() => setInvestigating((value) => !value)}>
-              {investigating ? "Hide evidence" : "Investigate"}
+              {investigating ? tr("Hide evidence") : tr("Investigate")}
               <ArrowRight
                 className={cn(
                   "size-4 transition-transform",
@@ -137,17 +140,17 @@ export function NexusIntelligence({
             <Button
               variant="outline"
               disabled
-              title="Campaign automation is not connected"
+              title={tr("Campaign automation is not connected")}
             >
               <Sparkles className="size-4" />
-              Create campaign · coming soon
+              {tr("Create campaign · coming soon")}
             </Button>
           </div>
         </div>
         <aside className="flex flex-col justify-between gap-5 rounded-xl border border-primary/15 bg-background/55 p-5 shadow-[0_1px_0_rgb(255_255_255/.04)_inset]">
           <div>
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Confidence</span>
+              <span className="text-muted-foreground">{tr("Confidence")}</span>
               <strong>{insight.confidence}%</strong>
             </div>
             <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted">
@@ -157,21 +160,20 @@ export function NexusIntelligence({
               />
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
-              Demo confidence score for interface preview.
+              {tr("Demo confidence score for interface preview.")}
             </p>
           </div>
           <div className="border-t pt-4">
             <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Estimated impact
+              {tr("Estimated impact")}
             </p>
-            <p className="mt-2 text-sm font-semibold">{insight.impact}</p>
+            <p className="mt-2 text-sm font-semibold"><T>{insight.impact}</T></p>
           </div>
           {mode === "demo" && (
             <div className="flex gap-2 rounded-lg bg-amber-500/8 p-3 text-xs leading-5 text-muted-foreground">
               <FlaskConical className="mt-0.5 size-4 shrink-0 text-amber-500" />
               <span>
-                Illustrative data only. No AI request was made and no action is
-                executed automatically.
+                {tr("Illustrative data only. No AI request was made and no action is executed automatically.")}
               </span>
             </div>
           )}

@@ -8,6 +8,7 @@ import { DropdownMenu } from "radix-ui";
 import { toast } from "sonner";
 import { switchWorkspace } from "@/app/(app)/workspace-actions";
 import type { UserWorkspace } from "@/lib/workspace-selection";
+import { useTr } from "@/components/lang-provider";
 
 export function WorkspaceSwitcher({
   activeWorkspace,
@@ -16,6 +17,7 @@ export function WorkspaceSwitcher({
   activeWorkspace: UserWorkspace;
   workspaces: UserWorkspace[];
 }) {
+  const tr = useTr();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
@@ -28,7 +30,7 @@ export function WorkspaceSwitcher({
         setOpen(false);
         router.refresh();
       } catch {
-        toast.error("Could not switch workspace. Please try again.");
+        toast.error(tr("Could not switch workspace. Please try again."));
       }
     });
   }
@@ -64,7 +66,7 @@ export function WorkspaceSwitcher({
           className="z-[70] w-60 rounded-xl border border-border bg-popover p-1.5 text-popover-foreground shadow-xl outline-none"
         >
           <DropdownMenu.Label className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
-            Your workspaces
+            {tr("Your workspaces")}
           </DropdownMenu.Label>
           {workspaces.map((workspace) => (
             <DropdownMenu.Item
@@ -78,7 +80,7 @@ export function WorkspaceSwitcher({
               </span>
               <span className="min-w-0 flex-1 truncate">{workspace.name}</span>
               {workspace.id === activeWorkspace.id && (
-                <Check className="size-4 text-primary" aria-label="Selected" />
+                <Check className="size-4 text-primary" aria-label={tr("Selected")} />
               )}
             </DropdownMenu.Item>
           ))}

@@ -2,17 +2,20 @@ import { getTeam } from "@/lib/queries";
 import { Avatar, Badge, Button, Card } from "@/components/ui";
 import { PageHead } from "@/components/page-kit";
 import { MoreHorizontal, Plus } from "lucide-react";
+import { getTr } from "@/lib/i18n/server";
+import { T } from "@/components/lang-provider";
 export default async function Team() {
+  const tr = await getTr();
   const members = await getTeam();
   return (
     <>
       <PageHead
-        title="Team"
-        description="Manage workspace members, roles and access."
+        title={tr("Team")}
+        description={tr("Manage workspace members, roles and access.")}
         action={
           <Button>
             <Plus className="size-4" />
-            Invite member
+            {tr("Invite member")}
           </Button>
         }
       />
@@ -43,13 +46,13 @@ export default async function Team() {
                     </div>
                   </td>
                   <td className="px-5">
-                    <Badge tone="blue">{m.role}</Badge>
+                    <Badge tone="blue"><T>{m.role}</T></Badge>
                   </td>
                   <td className="px-5">
-                    <Badge tone="green">Active</Badge>
+                    <Badge tone="green">{tr("Active")}</Badge>
                   </td>
                   <td className="px-5 text-muted-foreground">
-                    Secured by Supabase
+                    {tr("Secured by Supabase")}
                   </td>
                   <td>
                     <Button
@@ -64,7 +67,7 @@ export default async function Team() {
               {!members.length ? (
                 <tr className="border-t">
                   <td colSpan={5} className="px-5 py-12 text-center text-muted-foreground">
-                    No workspace members are available yet.
+                    {tr("No workspace members are available yet.")}
                   </td>
                 </tr>
               ) : null}

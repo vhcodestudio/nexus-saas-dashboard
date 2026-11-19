@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { NexusMark } from "./nexus-mark";
 import { Button, Card, Input } from "./ui";
+import { useTr } from "@/components/lang-provider";
 export function ResetPassword() {
+  const tr = useTr();
   const router = useRouter();
   const [error, setError] = useState("");
   const submit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -14,7 +16,7 @@ export function ResetPassword() {
     try {
       client = createClient();
     } catch {
-      setError("Password reset is temporarily unavailable.");
+      setError(tr("Password reset is temporarily unavailable."));
       return;
     }
     const result = await client.auth.updateUser({ password });
@@ -25,14 +27,14 @@ export function ResetPassword() {
     <Card className="mx-auto w-full max-w-md p-7 shadow-2xl">
       <NexusMark className="mx-auto size-10" />
       <h1 className="mt-5 text-center text-2xl font-semibold">
-        Choose a new password
+        {tr("Choose a new password")}
       </h1>
       <p className="mt-2 text-center text-sm text-muted-foreground">
-        Use at least eight characters and avoid reused passwords.
+        {tr("Use at least eight characters and avoid reused passwords.")}
       </p>
       <form onSubmit={submit} className="mt-7 space-y-4">
         <label className="block text-sm font-medium">
-          New password
+          {tr("New password")}
           <Input
             name="password"
             type="password"
@@ -50,7 +52,7 @@ export function ResetPassword() {
           </p>
         )}
         <Button className="w-full" type="submit">
-          Update password
+          {tr("Update password")}
         </Button>
       </form>
     </Card>

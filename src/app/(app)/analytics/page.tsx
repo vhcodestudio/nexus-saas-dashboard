@@ -3,8 +3,10 @@ import { RevenueChart } from "@/components/dashboard-chart";
 import { Card } from "@/components/ui";
 import { Metric, PageHead, SectionTitle } from "@/components/page-kit";
 import { getAnalyticsData } from "@/lib/queries";
+import { getTr } from "@/lib/i18n/server";
 
 export default async function Analytics() {
+  const tr = await getTr();
   const analytics = await getAnalyticsData();
   if (!analytics) return null;
   const { customers, transactions, model } = analytics;
@@ -33,30 +35,30 @@ export default async function Analytics() {
   return (
     <>
       <PageHead
-        title="Analytics"
-        description="Understand acquisition, revenue movement, retention and conversion."
+        title={tr("Analytics")}
+        description={tr("Understand acquisition, revenue movement, retention and conversion.")}
       />
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <Metric
-          label="Customers"
+          label={tr("Customers")}
           value={String(customers.length)}
           change="Live"
           detail="Current workspace"
         />
         <Metric
-          label="Active customers"
+          label={tr("Active customers")}
           value={String(active)}
           change="Live"
           detail="Current status"
         />
         <Metric
-          label="Approved payments"
+          label={tr("Approved payments")}
           value={String(approved)}
           change="Live"
           detail="All recorded transactions"
         />
         <Metric
-          label="Paid conversion"
+          label={tr("Paid conversion")}
           value={model.conversion + "%"}
           change="Live"
           detail="Customer-to-paid proxy"
@@ -64,8 +66,8 @@ export default async function Analytics() {
       </div>
       <Card className="mt-4 overflow-hidden">
         <SectionTitle
-          title="Approved revenue trend"
-          description="Monthly approved transaction volume from Supabase"
+          title={tr("Approved revenue trend")}
+          description={tr("Monthly approved transaction volume from Supabase")}
         />
         <div className="p-4">
           <RevenueChart data={months} />

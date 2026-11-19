@@ -10,7 +10,10 @@ import { getCurrentWorkspace } from "@/lib/workspace";
 import { createClient } from "@/lib/supabase/server";
 import { ArrowRight, CalendarDays } from "lucide-react";
 import Link from "next/link";
+import { getTr } from "@/lib/i18n/server";
+import { T } from "@/components/lang-provider";
 export default async function Dashboard() {
+  const tr = await getTr();
   const [customers, transactions, workspace, supabase] = await Promise.all([
     getCustomers(),
     getTransactions(),
@@ -67,7 +70,7 @@ export default async function Dashboard() {
         action={
           <Button variant="outline">
             <CalendarDays className="size-4" />
-            Mar 1 – Aug 28
+            {tr("Mar 1 – Aug 28")}
           </Button>
         }
       />
@@ -77,7 +80,7 @@ export default async function Dashboard() {
       />
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4 xl:gap-4">
         <DashboardKpi
-          label="Monthly recurring revenue"
+          label={tr("Monthly recurring revenue")}
           value={money(metrics.mrr)}
           series={metrics.mrrSeries}
           percent={mrrChange.percent}
@@ -85,7 +88,7 @@ export default async function Dashboard() {
           formatTooltip={money}
         />
         <DashboardKpi
-          label="Annual run rate"
+          label={tr("Annual run rate")}
           value={money(metrics.mrr * 12)}
           series={metrics.mrrSeries.map((point) => ({
             ...point,
@@ -96,14 +99,14 @@ export default async function Dashboard() {
           formatTooltip={money}
         />
         <DashboardKpi
-          label="Active customers"
+          label={tr("Active customers")}
           value={metrics.active.toLocaleString()}
           series={metrics.activeSeries}
           percent={activeChange.percent}
           detail={`+${metrics.newActiveThisMonth} active ${metrics.newActiveThisMonth === 1 ? "customer" : "customers"} this month`}
         />
         <DashboardKpi
-          label="Churn rate"
+          label={tr("Churn rate")}
           value={`${metrics.churn.toFixed(1)}%`}
           series={metrics.churnSeries}
           percent={churnChange.percent}
@@ -115,9 +118,9 @@ export default async function Dashboard() {
       <div className="mt-4 grid gap-4 xl:grid-cols-[1.65fr_1fr]">
         <Card className="animate-rise delay-1 overflow-hidden">
           <SectionTitle
-            title="Revenue growth"
-            description="MRR performance over the last 6 months"
-            aside={<Badge tone="green">Live data</Badge>}
+            title={tr("Revenue growth")}
+            description={tr("MRR performance over the last 6 months")}
+            aside={<Badge tone="green">{tr("Live data")}</Badge>}
           />
           <div className="p-4">
             <RevenueChart data={months} />
@@ -125,14 +128,14 @@ export default async function Dashboard() {
         </Card>
         <Card className="animate-rise delay-2 overflow-hidden">
           <SectionTitle
-            title="Customers by plan"
-            description="Current distribution"
+            title={tr("Customers by plan")}
+            description={tr("Current distribution")}
           />
           {planData.length ? (
             <PlansChart data={planData} />
           ) : (
             <p className="p-8 text-sm text-muted-foreground">
-              Plan distribution will appear after you add customers.
+              {tr("Plan distribution will appear after you add customers.")}
             </p>
           )}
         </Card>
@@ -140,14 +143,14 @@ export default async function Dashboard() {
       <div className="mt-4 grid gap-4 lg:grid-cols-[1.45fr_1fr]">
         <Card className="overflow-hidden">
           <SectionTitle
-            title="Recent customers"
-            description="Latest additions to your workspace"
+            title={tr("Recent customers")}
+            description={tr("Latest additions to your workspace")}
             aside={
               <Link
                 className="flex items-center gap-1 text-xs font-medium text-primary"
                 href="/customers"
               >
-                View all
+                {tr("View all")}
                 <ArrowRight className="size-3" />
               </Link>
             }
@@ -156,10 +159,10 @@ export default async function Dashboard() {
             <table className="w-full min-w-[600px] text-left text-sm">
               <thead className="bg-muted/50 text-xs text-muted-foreground">
                 <tr>
-                  <th className="px-5 py-3 font-medium">Customer</th>
-                  <th className="px-4 py-3 font-medium">Plan</th>
-                  <th className="px-4 py-3 font-medium">Status</th>
-                  <th className="px-5 py-3 text-right font-medium">MRR</th>
+                  <th className="px-5 py-3 font-medium">{tr("Customer")}</th>
+                  <th className="px-4 py-3 font-medium">{tr("Plan")}</th>
+                  <th className="px-4 py-3 font-medium">{tr("Status")}</th>
+                  <th className="px-5 py-3 text-right font-medium">{tr("MRR")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -171,7 +174,7 @@ export default async function Dashboard() {
                         {c.email}
                       </span>
                     </td>
-                    <td className="px-4 py-3">{c.plan}</td>
+                    <td className="px-4 py-3"><T>{c.plan}</T></td>
                     <td className="px-4 py-3">
                       <Badge
                         tone={
@@ -182,7 +185,7 @@ export default async function Dashboard() {
                               : "amber"
                         }
                       >
-                        {c.status}
+                        <T>{c.status}</T>
                       </Badge>
                     </td>
                     <td className="px-5 py-3 text-right font-mono">
@@ -195,9 +198,9 @@ export default async function Dashboard() {
           </div>
         </Card>
         <Card className="p-5">
-          <h2 className="font-semibold">Conversion snapshot</h2>
+          <h2 className="font-semibold">{tr("Conversion snapshot")}</h2>
           <p className="mt-1 text-xs text-muted-foreground">
-            Visitor-to-paid funnel · August
+            {tr("Visitor-to-paid funnel · August")}
           </p>
           {[
             ["Visitors", "24,892", "100%"],
